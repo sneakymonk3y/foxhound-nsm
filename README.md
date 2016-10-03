@@ -1,6 +1,6 @@
 # FOXHOUND-IDS
 
-RaspberryPi 3 IDS System based on [Bro](https://www.bro.org). Suitable for a home 'blackbox' deployment.
+RaspberryPi 3 IDS based on [Bro](https://www.bro.org). Suitable for a home 'blackbox' deployment.
 
 ### Requirements
 * [Raspberry Pi 3](https://thepihut.com/products/raspberry-pi-3-model-b) or ARM based system.
