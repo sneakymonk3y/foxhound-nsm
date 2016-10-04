@@ -79,76 +79,11 @@
 #### Network File Handling ####
 
 # Enable MD5 and SHA1 hashing for all files.
-#@load frameworks/files/hash-all-files
+@load frameworks/files/hash-all-files
 
 # Detect SHA1 sums in Team Cymru's Malware Hash Registry.
-#@load frameworks/files/detect-MHR
+@load frameworks/files/detect-MHR
 
 # Critical Stack, Inc - https://intel.criticalstack.com
 @load /opt/critical-stack/frameworks/intel
 
-# Evernote scripts
-@load bro-scripts/human
-@load bro-scripts/ssl-ext-san
-@load bro-scripts/exfil
-@load bro-scripts/notice-ext
-
-# Exfiltration
-redef Exfil::file_of_whitelisted_hostnames = "/usr/local/bro/share/bro/site/input/whitelists/hostnames.whitelist";
-redef Exfil::file_of_whitelisted_subnets = "/usr/local/bro/share/bro/site/input/whitelists/subnets.whitelist";
-# DNS zones to whitelist
-# define here instead of using the input framework becuase we can't reliably load a table before bro_init completes
-# and converting this to a regex requires bro_init.
-redef Exfil::common_zones = {
-    #".zombo.com", # Welcome to zombocom
-}
-
-# Flow
-# single conn Tx bytes over which we want to alert on immediately
-redef Exfil::flow_bytes_tx_to_notice= 20000000;
-# destination hosts to record if over this many bytes
-redef Exfil::flow_bytes_tx_to_log_and_track= 1000000;
-# number of large uploads per IP before an email is generated for that IP
-redef Exfil::count_of_tracked_flows_to_notice = 13;
-# how long to suppress re-notices
-redef Exfil::flow_suppression_interval = 480mins;
-# flow producer consumer ratio floor
-redef Exfil::min_flow_producer_consumer_ratio = 0.4;
-
-# DNS
-redef Exfil::query_interval = 1min;
-redef Exfil::queries_per_query_interval = 800.0;
-redef Exfil::query_length_sum_per_interval = 10000.0;
-redef Exfil::txt_answer_types_per_interval = 5.0;
-redef Exfil::null_answer_types_per_interval = 1.0;
-redef Exfil::frequent_queriers = {
-    # A cool host
-    10.0.0.1/32,
-    # A cool net
-    192.168.1.0/24,
-    };
-
-
-# ICMP
-redef Exfil::icmp_interval = 1min;
-redef Exfil::icmp_per_query_interval = 60.0;
-redef Exfil::frequent_icmp_senders = {
-    # A cool host
-    10.0.0.1/32,
-    # A cool net
-    192.168.1.0/24,
-};
-
-# Notices
-
-# Use notice_ext for emailed alert types
-redef Notice::ext_emailed_types = {
-    Exfil::Large_Flow,
-    Exfil::DNS_Excessive_Query_Velocity,
-    Exfil::DNS_Excessive_Query_Length,
-    Exfil::DNS_too_many_TXT_Answers,
-    Exfil::DNS_too_many_NULL_Answers,
-    Exfil::FTP_Upload,
-    Exfil::ICMP_Velocity,
-    Exfil::SSH,
-};
