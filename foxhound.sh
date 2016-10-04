@@ -4,7 +4,7 @@ read cs_api
 apt-get update
 apt-get -y upgrade
 
-#PFRING LOAD BALANCING
+#NTOP PFRING LOAD BALANCING
 #NO SUPPORT FOR ARM as of 03/10/2016
 
 #GEOIP
