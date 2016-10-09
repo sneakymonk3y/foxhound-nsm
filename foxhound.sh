@@ -84,8 +84,13 @@ cd /usr/local/bro/share/bro/site/
 git clone https://github.com/sneakymonk3y/bro-scripts.git
 echo "@load bro-scripts/geoip"  >> /usr/local/bro/share/bro/site/local.bro
 echo "@load bro-scripts/extact"  >> /usr/local/bro/share/bro/site/local.bro
-echo "@load bro-scripts/useragent-hunt"  >> /usr/local/bro/share/bro/site/local.bro
-broctl check
+
+if broctl check | grep -q 'ok'; then
+  broctl deploy
+fi
+else echo "bro-script check failed"
+
+
 broctl deploy
 
 #CRON JOBS
