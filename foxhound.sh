@@ -83,8 +83,8 @@ mkdir /opt/bro/extracted/
 cd /usr/local/bro/share/bro/site/
 git clone https://github.com/sneakymonk3y/bro-scripts.git
 echo "@load bro-scripts/geoip"  >> /usr/local/bro/share/bro/site/local.bro
-echo "@load bro-scripts/file-extraction"  >> /usr/local/bro/share/bro/site/local.bro
-echo "@load bro-scripts/user-agent-length"  >> /usr/local/bro/share/bro/site/local.bro
+echo "@load bro-scripts/extact"  >> /usr/local/bro/share/bro/site/local.bro
+echo "@load bro-scripts/useragent-hunt"  >> /usr/local/bro/share/bro/site/local.bro
 broctl check
 broctl deploy
 
@@ -93,14 +93,12 @@ echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
 echo "00 7/19 * * *  root sh /opt/criticalstack_update" >> /etc/crontab
 
 echo "
-
-███████╗ ██████╗ ██╗  ██╗██╗  ██╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗ 
-██╔════╝██╔═══██╗╚██╗██╔╝██║  ██║██╔═══██╗██║   ██║████╗  ██║██╔══██╗
-█████╗  ██║   ██║ ╚███╔╝ ███████║██║   ██║██║   ██║██╔██╗ ██║██║  ██║
-██╔══╝  ██║   ██║ ██╔██╗ ██╔══██║██║   ██║██║   ██║██║╚██╗██║██║  ██║
-██║     ╚██████╔╝██╔╝ ██╗██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝
-╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ 
-  
+    ______           __  __                      __
+   / ____/___  _  __/ / / /___  __  ______  ____/ /
+  / /_  / __ \| |/_/ /_/ / __ \/ / / / __ \/ __  / 
+ / __/ / /_/ />  </ __  / /_/ / /_/ / / / / /_/ /  
+/_/    \____/_/|_/_/ /_/\____/\__,_/_/ /_/\__,_/   
+                                                   
 " \ > /etc/motd                                                                 
 echo "foxhound" > /etc/hostname
 
