@@ -57,6 +57,11 @@ systemctl enable netsniff-ng
 systemctl daemon-reload
 service netsniff-ng start
 
+#EMAIL ALERTS
+#-Bro intel
+#-Bro Summary
+
+#NMAP NEW HOST DISCOVERY
 
 #INSTALL BRO
 sudo wget https://www.bro.org/downloads/release/bro-2.4.1.tar.gz
