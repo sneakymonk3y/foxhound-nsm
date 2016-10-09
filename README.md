@@ -2,12 +2,12 @@
 
 RaspberryPi 3 IDS based on [Bro](https://www.bro.org). Suitable for a home 'blackbox' deployment.
 
-''' bash
+``` bash
 root@foxhound:~# cd ~
 root@foxhound:~# git clone https://github.com/sneakymonk3y/foxhound-ids.git
 root@foxhound:~# chmod +x ~/foxhound-ids/foxhound.sh
 root@foxhound:~# ./foxhound-ids/foxhound.sh
-'''
+```
 
 
 
