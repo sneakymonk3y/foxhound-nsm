@@ -35,8 +35,28 @@ echo "
 	" \ >  /etc/network/if-up.d/interface-tuneup
 chmod +x /etc/network/if-up.d/interface-tuneup
 
-#PCAP - TBC
-#SNORT/SURICATA - TBC
+#PCAP - Netsniff-NG compile for ARM
+mkdir /opt/pcap
+touch /etc/sysconfig/netsniff-ng
+touch /opt/pcap/exclude.bpf
+git clone https://github.com/netsniff-ng/netsniff-ng.git
+cd netsniff-ng
+./configure && make && make install
+echo "[Unit]
+Description=Netsniff-NG PCAP
+After=network.target
+
+[Service]
+ExecStart=/usr/local/sbin/netsniff-ng --in eth0 --out /opt/pcap/ --bind-cpu 3 -s --interval 100MiB --prefix=foxhound-
+Type=simple
+EnvironmentFile=-/etc/sysconfig/netsniff-ng
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/netsniff-ng.service
+systemctl enable netsniff-ng
+systemctl daemon-reload
+service netsniff-ng start
+
 
 #INSTALL BRO
 sudo wget https://www.bro.org/downloads/release/bro-2.4.1.tar.gz
