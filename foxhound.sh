@@ -105,10 +105,10 @@ git clone https://github.com/sneakymonk3y/bro-scripts.git
 echo "@load bro-scripts/geoip"  >> /usr/local/bro/share/bro/site/local.bro
 echo "@load bro-scripts/extact"  >> /usr/local/bro/share/bro/site/local.bro
 
-if broctl check | grep -q 'ok'; then
-  broctl deploy
-fi
+if broctl check | grep -q ' ok'; then
+  broctl status
 else echo "bro-script check failed"
+fi
 
 broctl deploy
 broctl cron enable
@@ -123,7 +123,8 @@ echo "
   / /_  / __ \| |/_/ /_/ / __ \/ / / / __ \/ __  / 
  / __/ / /_/ />  </ __  / /_/ / /_/ / / / / /_/ /  
 /_/    \____/_/|_/_/ /_/\____/\__,_/_/ /_/\__,_/   
-                                                   
+-  B     L     A     C     K     B     O     X  -
+
 " \ > /etc/motd                                                                 
 echo "foxhound" > /etc/hostname
 
