@@ -110,8 +110,8 @@ if broctl check | grep -q 'ok'; then
 fi
 else echo "bro-script check failed"
 
-
 broctl deploy
+broctl cron enable
 
 #CRON JOBS
 echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
