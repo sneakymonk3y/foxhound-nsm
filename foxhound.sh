@@ -18,7 +18,7 @@ ln -s /usr/share/GeoIP/GeoLiteCityv6.dat /usr/share/GeoIP/GeoIPCityv6.dat
 
 #PACKAGES
 sudo apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev
-sudo apt-get -y install sendmail htop vim libgeoip-dev ethtool git tshark tcpdump nmap
+sudo apt-get -y install ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils
 
 #DISBALE IPV6
 echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
@@ -131,6 +131,19 @@ echo "
 	broctl restart
 " \ > /opt/criticalstack_update
 sudo chmod +x /opt/criticalstack_update
+
+#BRO REPORTING
+#PYSUBNETREE
+cd /opt/
+git clone git://git.bro-ids.org/pysubnettree.git
+cd pysubnettree/
+python setup.py install
+#IPSUMDUMP
+cd /opt/
+wget http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz
+tar -zxvf ipsumdump-1.85.tar.gz
+cd ipsumdump-1.85/
+./configure && make && make install
 
 #PULL BRO SCRIPTS
 mkdir /opt/bro/
