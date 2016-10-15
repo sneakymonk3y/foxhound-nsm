@@ -91,7 +91,6 @@ git clone https://github.com/Neo23x0/Loki.git
 cd /opt/Loki
 git clone https://github.com/Neo23x0/signature-base.git
 
-
 #NMAP NEW HOST DISCOVERY
 
 #INSTALL BRO
@@ -152,6 +151,7 @@ broctl cron enable
 #CRON JOBS
 echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
 echo "00 7/19 * * *  root sh /opt/criticalstack_update" >> /etc/crontab
+echo "0-59/5 * * * * root sh 'python loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait'" >> /etc/crontab 
 
 echo "
     ______           __  __                      __
