@@ -61,6 +61,37 @@ service netsniff-ng start
 #-Bro intel
 #-Bro Summary
 
+
+#LOKI YARA SCANNING
+apt-get -y install pip gcc python-dev python-pip autoconf libtool
+#INSTALL PYLZMA
+cd /opt/
+wget https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz
+tar -zxvf pylzma-0.4.8.tar.gz
+cd pylzma-0.4.8/
+python ez_setup.py
+python setup.py
+#INSTALL YARA
+cd /opt/
+git clone https://github.com/VirusTotal/yara.git
+cd /opt/yara
+./bootstrap.sh
+./configure
+make && make install
+#REQUIREMENTS FOR LOKI
+pip install psutil
+pip install yara-python
+pip install git
+pip install gitpython
+pip install pylzma
+pip install netaddr
+#INSTALL LOKI
+cd /opt/
+git clone https://github.com/Neo23x0/Loki.git
+cd /opt/Loki
+git clone https://github.com/Neo23x0/signature-base.git
+
+
 #NMAP NEW HOST DISCOVERY
 
 #INSTALL BRO
