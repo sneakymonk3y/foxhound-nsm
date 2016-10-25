@@ -15,9 +15,10 @@ echo "Please enter your notification email"
 read notification
 
 echo "Check security patches"
-apt-get update
-apt-get -y upgrade
+#apt-get update
+#apt-get -y upgrade
 
+echo "Creating directories"
 $INSTALL_DIR = /nsm/  
 mkdir -p $INSTALL_DIR
 mkdir -p $INSTALL_DIR/pcap/
@@ -37,8 +38,14 @@ install_geoip () {
 }
 
 install_packages () {
-	echo "Installing Required RPMs"
-	sudo apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils nc 
+#	echo "Installing Required RPMs"
+#	sudo apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils nc 
+#
+#	if [ $? -ne 0 ]; then
+#		Error "Error. Please check that yum can install needed packages."
+#		exit 2;
+#	fi
+
 }
 
 
@@ -89,60 +96,49 @@ create_service_netsniff () {
 }
 
 config_ssmtp () {
-	echo "Configuring SSMTP"
-		echo "
-		root=$cs_notification
-		mailhub=$cs_smtp_server
-		hostname=foxhound
-		FromLineOverride=YES
-		UseTLS=YES
-		UseSTARTTLS=YES
-		AuthUser=$cs_smtp_user
-		AuthPass=$cs_smtp_pass" \ > /etc/ssmtp/ssmtp.conf
+#	echo "Configuring SSMTP"
+#		echo "
+#		root=$notification
+#		mailhub=$smtp_server
+#		hostname=foxhound
+#		FromLineOverride=YES
+#		UseTLS=YES
+#		UseSTARTTLS=YES
+#		AuthUser=$smtp_user
+#		AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
 }
-#ALERT TEMPLATE
-echo "#!/bin/sh
-{
-    echo To: $cs_notification
-    echo "Mime-Version: 1.0"
-	echo "Content-type: text/html; charset=”iso-8859-1”"
-    echo From: bro@foxhound-nsm
-    echo Subject: Critical Stack Updated
-    echo
-    sudo -u critical-stack critical-stack-intel list
-} | ssmtp $cs_notification " > /opt/email_alert.sh
-chmod +x /opt/email_alert.sh
+
 
 install_loki () {
-	echo "Installing YARA packages"
-	apt-get -y install pip gcc python-dev python-pip autoconf libtool
-	echo "Installing Pylzma"
-		cd /opt/
-		wget https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz
-		tar -zxvf pylzma-0.4.8.tar.gz
-		cd pylzma-0.4.8/
-		python ez_setup.py
-		python setup.py
-	echo "Installing YARA"
-		cd /opt/
-		git clone https://github.com/VirusTotal/yara.git
-		cd /opt/yara
-		./bootstrap.sh
-		./configure
-		make && make install
-	echo "Installing PIP LOKI Packages"
-		pip install psutil
-		pip install yara-python
-		pip install git
-		pip install gitpython
-		pip install pylzma
-		pip install netaddr
-	echo "Installing LOKI"
-		cd $INSTALL_DIR
-		git clone https://github.com/Neo23x0/Loki.git
-		cd $INSTALL_DIR/Loki
-		git clone https://github.com/Neo23x0/signature-base.git
-		chmod +x $INSTALL_DIR/Loki/loki.py
+#	echo "Installing YARA packages"
+#	apt-get -y install pip gcc python-dev python-pip autoconf libtool
+#	echo "Installing Pylzma"
+#		cd /opt/
+#		wget https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz
+#		tar -zxvf pylzma-0.4.8.tar.gz
+#		cd pylzma-0.4.8/
+#		python ez_setup.py
+#		python setup.py
+#	echo "Installing YARA"
+#		cd /opt/
+#		git clone https://github.com/VirusTotal/yara.git
+#		cd /opt/yara
+#		./bootstrap.sh
+#		./configure
+#		make && make install
+#	echo "Installing PIP LOKI Packages"
+#		pip install psutil
+#		pip install yara-python
+#		pip install git
+#		pip install gitpython
+#		pip install pylzma
+#		pip install netaddr
+#	echo "Installing LOKI"
+#		cd $INSTALL_DIR
+#		git clone https://github.com/Neo23x0/Loki.git
+#		cd $INSTALL_DIR/Loki
+#		git clone https://github.com/Neo23x0/signature-base.git
+#		chmod +x $INSTALL_DIR/Loki/loki.py
 }
 
 install_bro () {
@@ -150,7 +146,7 @@ install_bro () {
 		wget https://www.bro.org/downloads/release/bro-2.4.1.tar.gz
 		tar -xzf bro-2.4.1.tar.gz
 	cd bro-2.4.1 
-		./configure --prefix=/nsm/bro --localstatedir=$INSTALL_DIR/bro/
+		./configure --localstatedir=$INSTALL_DIR/bro/
 		make -j 4
 		make install
 	echo "Setting Bro variables"
@@ -158,20 +154,20 @@ install_bro () {
 }
 
 install_criticalstack () {
-	echo "Installing Critical Stack Agent"
-		wget http://intel.criticalstack.com/client/critical-stack-intel-arm.deb
-		dpkg -i critical-stack-intel-arm.deb
-		su -u critical-stack critical-stack-intel api $cs_api 
-		rm critical-stack-intel-arm.deb
-		su -u critical-stack critical-stack-intel list
-		su -u critical-stack critical-stack-intel pull
+#	echo "Installing Critical Stack Agent"
+#		wget http://intel.criticalstack.com/client/critical-stack-intel-arm.deb
+#		dpkg -i critical-stack-intel-arm.deb
+#		su -u critical-stack critical-stack-intel api $api 
+#		rm critical-stack-intel-arm.deb
+#		su -u critical-stack critical-stack-intel list
+#		su -u critical-stack critical-stack-intel pull
 		#Deploy and start BroIDS
-		export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/bro/bin:\$PATH"
-	echo "Deploying and starting BroIDS"
-		broctl check
-		broctl deploy
-		broctl cron enable
-		#Create update script
+#		export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/bro/bin:\$PATH"
+#	echo "Deploying and starting BroIDS"
+#		broctl check
+#		broctl deploy
+#		broctl cron enable
+#		#Create update script
 	echo "
 		sudo -u critical-stack critical-stack-intel config
 		echo \"#### Pulling feed update ####\"
@@ -188,19 +184,20 @@ install_criticalstack () {
 install_bro_reporting () {
 	#BRO REPORTING
 	#PYSUBNETREE
-	cd /opt/
-	git clone git://git.bro-ids.org/pysubnettree.git
-	cd pysubnettree/
-	python setup.py install
+#	cd /opt/
+#	git clone git://git.bro-ids.org/pysubnettree.git
+#	cd pysubnettree/
+#	python setup.py install
 	#IPSUMDUMP
-	cd /opt/
-	wget http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz
-	tar -zxvf ipsumdump-1.85.tar.gz
-	cd ipsumdump-1.85/
-	./configure && make && make install
+#	cd /opt/
+#	wget http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz
+#	tar -zxvf ipsumdump-1.85.tar.gz
+#	cd ipsumdump-1.85/
+#	./configure && make && make install
 }
 
 config_bro_scripts () {
+echo "Configuring BRO scripts"
 	#PULL BRO SCRIPTS
 	cd /usr/local/bro/share/bro/site/
 	git clone https://github.com/sneakymonk3y/bro-scripts.git
@@ -229,8 +226,8 @@ config_bro_scripts
 
 #CRON JOBS
 echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
-echo "00 7/19 * * *  root sh $INSTALL_DIR/scripts/criticalstack_update" >> /etc/crontab
-echo "0-59/5 * * * * root sh $INSTALL_DIR/Loki/loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait " >> /etc/crontab 
+echo "00 7/19 * * *  root $INSTALL_DIR/scripts/criticalstack_update" >> /etc/crontab
+echo "0-59/5 * * * * root $INSTALL_DIR/Loki/loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait " >> /etc/crontab 
 
 echo "
     ______           __  __                      __
