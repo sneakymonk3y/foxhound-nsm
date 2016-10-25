@@ -1,6 +1,6 @@
 # FOXHOUND-IDS
 
-RaspberryPi 3 IDS based on [Bro](https://www.bro.org). Suitable for a home 'blackbox' deployment.
+RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blackbox' deployment.
 
 ``` bash
 root@foxhound:~# cd ~
