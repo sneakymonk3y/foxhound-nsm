@@ -4,9 +4,9 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
 
 ``` bash
 root@foxhound:~# cd ~
-root@foxhound:~# git clone https://github.com/sneakymonk3y/foxhound-ids.git
-root@foxhound:~# chmod +x ~/foxhound-ids/foxhound.sh
-root@foxhound:~# ./foxhound-ids/foxhound.sh
+root@foxhound:~# git clone https://github.com/sneakymonk3y/foxhound-nsm.git
+root@foxhound:~# chmod +x ~/foxhound-nsm/foxhound.sh
+root@foxhound:~# ./foxhound-nsm/foxhound.sh
 ```
 
 
