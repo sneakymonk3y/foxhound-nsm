@@ -104,7 +104,7 @@ echo "#!/bin/sh
     echo To: $cs_notification
     echo "Mime-Version: 1.0"
 	echo "Content-type: text/html; charset=”iso-8859-1”"
-    echo From: bro@foxhound-ids
+    echo From: bro@foxhound-nsm
     echo Subject: Critical Stack Updated
     echo
     sudo -u critical-stack critical-stack-intel list
@@ -216,7 +216,7 @@ config_bro_scripts () {
 #CRON JOBS
 echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
 echo "00 7/19 * * *  root sh /opt/criticalstack_update" >> /etc/crontab
-echo "0-59/5 * * * * root sh 'python loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait'" >> /etc/crontab 
+echo "0-59/5 * * * * root sh '/usr/bin/python /opt/Loki/loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait'" >> /etc/crontab 
 
 echo "
     ______           __  __                      __
