@@ -157,10 +157,10 @@ install_criticalstack () {
 #	echo "Installing Critical Stack Agent"
 #		wget http://intel.criticalstack.com/client/critical-stack-intel-arm.deb
 #		dpkg -i critical-stack-intel-arm.deb
-#		su -u critical-stack critical-stack-intel api $api 
+#		sudo -u critical-stack critical-stack-intel api $api 
 #		rm critical-stack-intel-arm.deb
-#		su -u critical-stack critical-stack-intel list
-#		su -u critical-stack critical-stack-intel pull
+#		sudo -u critical-stack critical-stack-intel list
+#		sudo -u critical-stack critical-stack-intel pull
 		#Deploy and start BroIDS
 #		export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/bro/bin:\$PATH"
 #	echo "Deploying and starting BroIDS"
