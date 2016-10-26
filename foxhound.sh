@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export BINDIR="${BINDIR-/usr/bin}"
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -31,8 +32,8 @@ mkdir -p /nsm/scripts/
 mkdir -p /nsm/bro/
 mkdir -p /nsm/bro/extracted/
 
-Info  "Installing GEO-IP"
 install_geoip () {
+	Info  "Installing GEO-IP"
 #	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 #	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz
 #	gunzip GeoLiteCity.dat.gz
