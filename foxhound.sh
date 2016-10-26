@@ -42,18 +42,18 @@ Info "Installing GEO-IP"
 #	mv GeoLiteCity* /usr/share/GeoIP/
 #	ln -s /usr/share/GeoIP/GeoLiteCity.dat /usr/share/GeoIP/GeoIPCity.dat
 #	ln -s /usr/share/GeoIP/GeoLiteCityv6.dat /usr/share/GeoIP/GeoIPCityv6.dat 
-}
+} > /dev/null
 
 function install_packages()
 {
 Info "Installing Required RPMs"
-#	sudo apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils nc 
+#	sudo apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils nc &>/dev/null
 # 
 #	if [ $? -ne 0 ]; then
 #		Error "Error. Please check that yum can install needed packages."
 #		exit 2;
 #	fi
-}
+} > /dev/null
 
 function config_net_ipv6()
 {
@@ -61,7 +61,7 @@ Info "Disabling IPv6"
 #	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
 #	sed -i '1 s/$/ ipv6.disable=1/' /boot/cmdline.txt
 #	sysctl -p
-}
+} > /dev/null
 
 function config_net_opts()
 {
@@ -75,7 +75,7 @@ Info "Configuring network options"
 #	" \ >  /etc/network/if-up.d/interface-tuneup
 #	chmod +x /etc/network/if-up.d/interface-tuneup
 #	ifconfig eth0 down && ifconfig eth0 up
-}
+} > /dev/null
 
 function install_netsniff() 
 {
@@ -84,7 +84,7 @@ Info "Installing Netsniff-NG PCAP"
 #	git clone https://github.com/netsniff-ng/netsniff-ng.git
 #	cd netsniff-ng
 #	./configure && make && make install
-}
+} > /dev/null
 
 function create_service_netsniff() 
 {
@@ -103,8 +103,8 @@ Info "Creating Netsniff-NG service"
 	systemctl enable netsniff-ng
 	systemctl daemon-reload
 	service netsniff-ng start
-}
-
+} > /dev/null
+ 
 function config_ssmtp() 
 {
 Info "Configuring SSMTP"
@@ -117,7 +117,7 @@ Info "Configuring SSMTP"
 #		UseSTARTTLS=YES
 #		AuthUser=$smtp_user
 #		AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
-}
+} > /dev/null
 
 
 function install_loki() 
@@ -151,7 +151,7 @@ Info "Installing YARA packages"
 #		cd /nsm/Loki
 #		git clone https://github.com/Neo23x0/signature-base.git
 #		chmod +x /nsm/Loki/loki.py
-}
+} > /dev/null
 
 function install_bro() 
 {
@@ -164,7 +164,7 @@ Info "Installing Bro"
 		make install
 	echo "Setting Bro variables"
 	echo "export PATH=/usr/local/bro/bin:\$PATH" >> /etc/profile
-}
+} > /dev/null
 
 function install_criticalstack() 
 {
@@ -193,7 +193,7 @@ Info "Installing Critical Stack Agent"
 		broctl restart
 	" \ > /nsm/scripts/criticalstack_update
 		sudo chmod +x /nsm/scripts/criticalstack_update
-}
+} > /dev/null
 
 function install_bro_reporting() 
 {
@@ -209,7 +209,7 @@ Info "BRO REPORTING"
 #	tar -zxvf ipsumdump-1.85.tar.gz
 #	cd ipsumdump-1.85/
 #	./configure && make && make install
-}
+} > /dev/null
 
 function config_bro_scripts() 
 {
@@ -218,14 +218,14 @@ Info "Configuring BRO scripts"
 	cd /usr/local/bro/share/bro/site/
 	git clone https://github.com/sneakymonk3y/bro-scripts.git
 	echo "@load bro-scripts/geoip"  >> /usr/local/bro/share/bro/site/local.bro
-	echo "@load bro-scripts/extact"  >> /usr/local/bro/share/bro/site/local.bro
+	echo "@load bro-scripts/extract"  >> /usr/local/bro/share/bro/site/local.bro
 
 	if broctl check | grep -q ' ok'; then
 	  broctl status
 	else echo "bro-script check failed"
 	fi
 	broctl deploy
-}
+} > /dev/null
 
 install_geoip
 install_packages
