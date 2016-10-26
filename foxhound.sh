@@ -125,8 +125,8 @@ Info "Installing YARA packages"
 		wget -q https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz >/dev/null
 		tar -zxvf pylzma-0.4.8.tar.gz
 		cd pylzma-0.4.8/
-		python ez_setup.py
-		python setup.py
+		python ez_setup.py >/dev/null
+		python setup.py >/dev/null
 	Info "Installing YARA"
 		cd /opt/
 		git clone https://github.com/VirusTotal/yara.git >/dev/null
@@ -151,10 +151,11 @@ Info "Installing YARA packages"
 function install_bro() 
 {
 Info "Installing Bro"
+	cd /opt/
 		wget -q https://www.bro.org/downloads/release/bro-2.4.1.tar.gz >/dev/null
 		tar -xzf bro-2.4.1.tar.gz
 	cd bro-2.4.1 
-		./configure --localstatedir=/nsm/bro/ >/dev/null
+		./configure --localstatedir=/nsm/bro/
 		make -j 4 >/dev/null
 		make install >/dev/null
 	Info "Setting Bro variables"
