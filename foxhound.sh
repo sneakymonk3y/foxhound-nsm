@@ -17,7 +17,7 @@ echo "Please enter your notification email"
 read notification
 
 echo "Check security patches"
-#apt-get update
+#apt-get update 
 #apt-get -y upgrade
 
 echo "Creating directories"
