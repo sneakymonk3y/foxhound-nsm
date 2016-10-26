@@ -46,7 +46,7 @@ Info "Installing GEO-IP"
 
 function install_packages()
 {
-echo "Installing Required RPMs"
+Info "Installing Required RPMs"
 #	sudo apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils nc 
 # 
 #	if [ $? -ne 0 ]; then
@@ -57,7 +57,7 @@ echo "Installing Required RPMs"
 
 function config_net_ipv6()
 {
-echo "Disabling IPv6"
+Info "Disabling IPv6"
 #	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
 #	sed -i '1 s/$/ ipv6.disable=1/' /boot/cmdline.txt
 #	sysctl -p
@@ -65,7 +65,7 @@ echo "Disabling IPv6"
 
 function config_net_opts()
 {
-echo "Configuring network options"
+Info "Configuring network options"
 #	echo "
 #		#!/bin/bash
 #		for i in rx tx gso gro; do ethtool -K eth0 $i off; done;
@@ -79,7 +79,7 @@ echo "Configuring network options"
 
 function install_netsniff() 
 {
-echo "Installing Netsniff-NG PCAP"
+Info "Installing Netsniff-NG PCAP"
 #	touch /etc/sysconfig/netsniff-ng
 #	git clone https://github.com/netsniff-ng/netsniff-ng.git
 #	cd netsniff-ng
@@ -88,7 +88,7 @@ echo "Installing Netsniff-NG PCAP"
 
 function create_service_netsniff() 
 {
-	echo "Creating Netsniff-NG service"
+Info "Creating Netsniff-NG service"
 		echo "[Unit]
 		Description=Netsniff-NG PCAP
 		After=network.target
@@ -107,7 +107,7 @@ function create_service_netsniff()
 
 function config_ssmtp() 
 {
-echo "Configuring SSMTP"
+Info "Configuring SSMTP"
 #		echo "
 #		root=$notification
 #		mailhub=$smtp_server
@@ -122,7 +122,7 @@ echo "Configuring SSMTP"
 
 function install_loki() 
 {
-echo "Installing YARA packages"
+Info "Installing YARA packages"
 #	apt-get -y install pip gcc python-dev python-pip autoconf libtool
 #	echo "Installing Pylzma"
 #		cd /opt/
@@ -155,7 +155,7 @@ echo "Installing YARA packages"
 
 function install_bro() 
 {
-	echo "Installing Bro"
+Info "Installing Bro"
 		wget https://www.bro.org/downloads/release/bro-2.4.1.tar.gz
 		tar -xzf bro-2.4.1.tar.gz
 	cd bro-2.4.1 
@@ -168,7 +168,7 @@ function install_bro()
 
 function install_criticalstack() 
 {
-echo "Installing Critical Stack Agent"
+Info "Installing Critical Stack Agent"
 #		wget http://intel.criticalstack.com/client/critical-stack-intel-arm.deb
 #		dpkg -i critical-stack-intel-arm.deb
 #		sudo -u critical-stack critical-stack-intel api $api 
@@ -197,7 +197,7 @@ echo "Installing Critical Stack Agent"
 
 function install_bro_reporting() 
 {
-	#BRO REPORTING
+Info "BRO REPORTING"
 	#PYSUBNETREE
 #	cd /opt/
 #	git clone git://git.bro-ids.org/pysubnettree.git
@@ -213,7 +213,7 @@ function install_bro_reporting()
 
 function config_bro_scripts() 
 {
-echo "Configuring BRO scripts"
+Info "Configuring BRO scripts"
 	#PULL BRO SCRIPTS
 	cd /usr/local/bro/share/bro/site/
 	git clone https://github.com/sneakymonk3y/bro-scripts.git
