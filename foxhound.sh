@@ -46,7 +46,7 @@ Info "Installing GEO-IP"
 
 function install_packages()
 {
-#	echo "Installing Required RPMs"
+echo "Installing Required RPMs"
 #	sudo apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils nc 
 # 
 #	if [ $? -ne 0 ]; then
@@ -57,7 +57,7 @@ function install_packages()
 
 function config_net_ipv6()
 {
-#	echo "Disabling IPv6"
+echo "Disabling IPv6"
 #	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
 #	sed -i '1 s/$/ ipv6.disable=1/' /boot/cmdline.txt
 #	sysctl -p
@@ -65,7 +65,7 @@ function config_net_ipv6()
 
 function config_net_opts()
 {
-#	echo "Configuring network options"
+echo "Configuring network options"
 #	echo "
 #		#!/bin/bash
 #		for i in rx tx gso gro; do ethtool -K eth0 $i off; done;
@@ -79,7 +79,7 @@ function config_net_opts()
 
 function install_netsniff() 
 {
-#	echo "Installing Netsniff-NG PCAP"
+echo "Installing Netsniff-NG PCAP"
 #	touch /etc/sysconfig/netsniff-ng
 #	git clone https://github.com/netsniff-ng/netsniff-ng.git
 #	cd netsniff-ng
@@ -107,7 +107,7 @@ function create_service_netsniff()
 
 function config_ssmtp() 
 {
-#	echo "Configuring SSMTP"
+echo "Configuring SSMTP"
 #		echo "
 #		root=$notification
 #		mailhub=$smtp_server
@@ -122,7 +122,7 @@ function config_ssmtp()
 
 function install_loki() 
 {
-#	echo "Installing YARA packages"
+echo "Installing YARA packages"
 #	apt-get -y install pip gcc python-dev python-pip autoconf libtool
 #	echo "Installing Pylzma"
 #		cd /opt/
@@ -168,7 +168,7 @@ function install_bro()
 
 function install_criticalstack() 
 {
-#	echo "Installing Critical Stack Agent"
+echo "Installing Critical Stack Agent"
 #		wget http://intel.criticalstack.com/client/critical-stack-intel-arm.deb
 #		dpkg -i critical-stack-intel-arm.deb
 #		sudo -u critical-stack critical-stack-intel api $api 
