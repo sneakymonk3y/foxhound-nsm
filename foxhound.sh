@@ -21,9 +21,6 @@ read smtp_pass
 echo "Please enter your notification email"
 read notification
 
-Info  "Check security patches"
-apt-get update && apt-get -y upgrade >/dev/null
-
 Info  "Creating directories"
 mkdir -p /nsm
 mkdir -p /nsm/pcap/
@@ -34,8 +31,8 @@ mkdir -p /nsm/bro/extracted/
 function install_geoip()
 {
 Info "Installing GEO-IP"
-	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz >/dev/null
-	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz >/dev/null
+	wget -q http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz >/dev/null
+	wget -q http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz >/dev/null
 	gunzip GeoLiteCity.dat.gz >/dev/null
 	gunzip GeoLiteCityv6.dat.gz >/dev/null
 	mv GeoLiteCity* /usr/share/GeoIP/
@@ -45,11 +42,11 @@ Info "Installing GEO-IP"
 
 function install_packages()
 {
-Info "Installing Required RPMs"
-apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils nc &>/dev/null
+Info "Installing Required .debs"
+apt-get update &>/dev/null && apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils &>/dev/null
 
 	if [ $? -ne 0 ]; then
-		Error "Error. Please check that yum can install needed packages."
+		Error "Error. Please check that apt-get can install needed packages."
 		exit 2;
 	fi
 } 
@@ -58,8 +55,8 @@ function config_net_ipv6()
 {
 Info "Disabling IPv6"
 	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
-	sed -i '1 s/$/ ipv6.disable=1/' /boot/cmdline.txt
-	sysctl -p >/dev/null
+	sed -i '1 s/$/ ipv6.disable_ipv6=1/' /boot/cmdline.txt
+	sysctl -p
 } 
 
 function config_net_opts()
@@ -79,7 +76,7 @@ Info "Configuring network options"
 function install_netsniff() 
 {
 Info "Installing Netsniff-NG PCAP"
-	touch /etc/sysconfig/netsniff-ng
+	touch /etc/netsniff-ng
 	git clone https://github.com/netsniff-ng/netsniff-ng.git >/dev/null
 	cd netsniff-ng
 	./configure && make && make install >/dev/null
@@ -95,7 +92,7 @@ Info "Creating Netsniff-NG service"
 		[Service]
 		ExecStart=/usr/local/sbin/netsniff-ng --in eth0 --out /nsm/pcap/ --bind-cpu 3 -s --interval 100MiB --prefix=foxhound-
 		Type=simple
-		EnvironmentFile=-/etc/sysconfig/netsniff-ng
+		EnvironmentFile=-/etc/netsniff-ng
 
 		[Install]
 		WantedBy=multi-user.target" > /etc/systemd/system/netsniff-ng.service
@@ -125,7 +122,7 @@ Info "Installing YARA packages"
 	apt-get -y install pip gcc python-dev python-pip autoconf libtool
 	Info "Installing Pylzma"
 		cd /opt/
-		wget https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz >/dev/null
+		wget -q https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz >/dev/null
 		tar -zxvf pylzma-0.4.8.tar.gz
 		cd pylzma-0.4.8/
 		python ez_setup.py
@@ -140,7 +137,6 @@ Info "Installing YARA packages"
 	Info "Installing PIP LOKI Packages"
 		pip install psutil
 		pip install yara-python
-		pip install git
 		pip install gitpython
 		pip install pylzma
 		pip install netaddr
@@ -155,7 +151,7 @@ Info "Installing YARA packages"
 function install_bro() 
 {
 Info "Installing Bro"
-		wget https://www.bro.org/downloads/release/bro-2.4.1.tar.gz >/dev/null
+		wget -q https://www.bro.org/downloads/release/bro-2.4.1.tar.gz >/dev/null
 		tar -xzf bro-2.4.1.tar.gz
 	cd bro-2.4.1 
 		./configure --localstatedir=/nsm/bro/ >/dev/null
@@ -168,7 +164,7 @@ Info "Installing Bro"
 function install_criticalstack() 
 {
 Info "Installing Critical Stack Agent"
-		wget http://intel.criticalstack.com/client/critical-stack-intel-arm.deb >/dev/null
+		wget -q http://intel.criticalstack.com/client/critical-stack-intel-arm.deb >/dev/null
 		dpkg -i critical-stack-intel-arm.deb >/dev/null
 		sudo -u critical-stack critical-stack-intel api $api 
 		rm critical-stack-intel-arm.deb
@@ -204,7 +200,7 @@ Info "Bro Reporting Requirements"
 	python setup.py install >/dev/null
 #IPSUMDUMP
 	cd /opt/
-	wget http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz >/dev/null
+	wget -q http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz >/dev/null
 	tar -zxvf ipsumdump-1.85.tar.gz
 	cd ipsumdump-1.85/
 	./configure && make && make install >/dev/null
