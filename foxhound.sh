@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit 1
@@ -19,12 +21,11 @@ echo "Check security patches"
 #apt-get -y upgrade
 
 echo "Creating directories"
-$INSTALL_DIR=/nsm/  
-mkdir -p $INSTALL_DIR
-mkdir -p $INSTALL_DIR/pcap/
-mkdir -p $INSTALL_DIR/scripts/
-mkdir -p $INSTALL_DIR/bro/
-mkdir -p $INSTALL_DIR/bro/extracted/
+mkdir -p /nsm
+mkdir -p /nsm/pcap/
+mkdir -p /nsm/scripts/
+mkdir -p /nsm/bro/
+mkdir -p /nsm/bro/extracted/
 
 echo "Installing GEO-IP"
 install_geoip () {
@@ -84,7 +85,7 @@ create_service_netsniff () {
 		After=network.target
 
 		[Service]
-		ExecStart=/usr/local/sbin/netsniff-ng --in eth0 --out $INSTALL_DIR/pcap/ --bind-cpu 3 -s --interval 100MiB --prefix=foxhound-
+		ExecStart=/usr/local/sbin/netsniff-ng --in eth0 --out /nsm/pcap/ --bind-cpu 3 -s --interval 100MiB --prefix=foxhound-
 		Type=simple
 		EnvironmentFile=-/etc/sysconfig/netsniff-ng
 
@@ -134,11 +135,11 @@ install_loki () {
 #		pip install pylzma
 #		pip install netaddr
 #	echo "Installing LOKI"
-#		cd $INSTALL_DIR
+#		cd /nsm
 #		git clone https://github.com/Neo23x0/Loki.git
-#		cd $INSTALL_DIR/Loki
+#		cd /nsm/Loki
 #		git clone https://github.com/Neo23x0/signature-base.git
-#		chmod +x $INSTALL_DIR/Loki/loki.py
+#		chmod +x /nsm/Loki/loki.py
 }
 
 install_bro () {
@@ -146,7 +147,7 @@ install_bro () {
 		wget https://www.bro.org/downloads/release/bro-2.4.1.tar.gz
 		tar -xzf bro-2.4.1.tar.gz
 	cd bro-2.4.1 
-		./configure --localstatedir=$INSTALL_DIR/bro/
+		./configure --localstatedir=/nsm/bro/
 		make -j 4
 		make install
 	echo "Setting Bro variables"
@@ -177,8 +178,8 @@ install_criticalstack () {
 		broctl install
 		echo \"#### Restarting bro ####\"
 		broctl restart
-	" \ > $INSTALL_DIR/scripts/criticalstack_update
-		sudo chmod +x $INSTALL_DIR/scripts/criticalstack_update
+	" \ > /nsm/scripts/criticalstack_update
+		sudo chmod +x /nsm/scripts/criticalstack_update
 }
 
 install_bro_reporting () {
@@ -226,8 +227,8 @@ config_bro_scripts
 
 #CRON JOBS
 echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
-echo "00 7/19 * * *  root $INSTALL_DIR/scripts/criticalstack_update" >> /etc/crontab
-echo "0-59/5 * * * * root $INSTALL_DIR/Loki/loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait " >> /etc/crontab 
+echo "00 7/19 * * *  root /nsm/scripts/criticalstack_update" >> /etc/crontab
+echo "0-59/5 * * * * root /nsm/Loki/loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait " >> /etc/crontab 
 
 echo "
     ______           __  __                      __
