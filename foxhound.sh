@@ -19,7 +19,7 @@ echo "Check security patches"
 #apt-get -y upgrade
 
 echo "Creating directories"
-$INSTALL_DIR = /nsm/  
+$INSTALL_DIR=/nsm/  
 mkdir -p $INSTALL_DIR
 mkdir -p $INSTALL_DIR/pcap/
 mkdir -p $INSTALL_DIR/scripts/
