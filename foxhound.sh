@@ -32,7 +32,7 @@ mkdir -p /nsm/scripts/
 mkdir -p /nsm/bro/
 mkdir -p /nsm/bro/extracted/
 
-install_geoip () {
+function install_geoip () {
 	Info  "Installing GEO-IP"
 #	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 #	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz
@@ -43,7 +43,7 @@ install_geoip () {
 #	ln -s /usr/share/GeoIP/GeoLiteCityv6.dat /usr/share/GeoIP/GeoIPCityv6.dat
 }
 
-install_packages () {
+function install_packages () {
 #	echo "Installing Required RPMs"
 #	sudo apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils nc 
 #
@@ -55,14 +55,14 @@ install_packages () {
 }
 
 
-config_net_ipv6 () {
+function config_net_ipv6 () {
 #	echo "Disabling IPv6"
 #	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
 #	sed -i '1 s/$/ ipv6.disable=1/' /boot/cmdline.txt
 #	sysctl -p
 }
 
-config_net_opts () {
+function config_net_opts () {
 #	echo "Configuring network options"
 #	echo "
 #		#!/bin/bash
@@ -75,7 +75,7 @@ config_net_opts () {
 #	ifconfig eth0 down && ifconfig eth0 up
 }
 
-install_netsniff () {
+function install_netsniff () {
 #	echo "Installing Netsniff-NG PCAP"
 #	touch /etc/sysconfig/netsniff-ng
 #	git clone https://github.com/netsniff-ng/netsniff-ng.git
@@ -83,7 +83,7 @@ install_netsniff () {
 #	./configure && make && make install
 }
 
-create_service_netsniff () {
+function create_service_netsniff () {
 	echo "Creating Netsniff-NG service"
 		echo "[Unit]
 		Description=Netsniff-NG PCAP
@@ -101,7 +101,7 @@ create_service_netsniff () {
 	service netsniff-ng start
 }
 
-config_ssmtp () {
+function config_ssmtp () {
 #	echo "Configuring SSMTP"
 #		echo "
 #		root=$notification
@@ -115,7 +115,7 @@ config_ssmtp () {
 }
 
 
-install_loki () {
+function install_loki () {
 #	echo "Installing YARA packages"
 #	apt-get -y install pip gcc python-dev python-pip autoconf libtool
 #	echo "Installing Pylzma"
@@ -147,7 +147,7 @@ install_loki () {
 #		chmod +x /nsm/Loki/loki.py
 }
 
-install_bro () {
+function install_bro () {
 	echo "Installing Bro"
 		wget https://www.bro.org/downloads/release/bro-2.4.1.tar.gz
 		tar -xzf bro-2.4.1.tar.gz
@@ -159,7 +159,7 @@ install_bro () {
 	echo "export PATH=/usr/local/bro/bin:\$PATH" >> /etc/profile
 }
 
-install_criticalstack () {
+function install_criticalstack () {
 #	echo "Installing Critical Stack Agent"
 #		wget http://intel.criticalstack.com/client/critical-stack-intel-arm.deb
 #		dpkg -i critical-stack-intel-arm.deb
@@ -187,7 +187,7 @@ install_criticalstack () {
 		sudo chmod +x /nsm/scripts/criticalstack_update
 }
 
-install_bro_reporting () {
+function install_bro_reporting () {
 	#BRO REPORTING
 	#PYSUBNETREE
 #	cd /opt/
@@ -202,7 +202,7 @@ install_bro_reporting () {
 #	./configure && make && make install
 }
 
-config_bro_scripts () {
+function config_bro_scripts () {
 echo "Configuring BRO scripts"
 	#PULL BRO SCRIPTS
 	cd /usr/local/bro/share/bro/site/
