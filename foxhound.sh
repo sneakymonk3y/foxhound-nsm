@@ -1,9 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit 1
 fi
+
+# Load support functions
+_scriptDir="$(dirname `readlink -f $0`)"
+source lib.sh
 
 echo "Please enter your Critical Stack API Key: "
 read api
@@ -16,18 +20,18 @@ read smtp_pass
 echo "Please enter your notification email"
 read notification
 
-echo "Check security patches"
+Info  "Check security patches"
 #apt-get update 
 #apt-get -y upgrade
 
-echo "Creating directories"
+Info  "Creating directories"
 mkdir -p /nsm
 mkdir -p /nsm/pcap/
 mkdir -p /nsm/scripts/
 mkdir -p /nsm/bro/
 mkdir -p /nsm/bro/extracted/
 
-echo "Installing GEO-IP"
+Info  "Installing GEO-IP"
 install_geoip () {
 #	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 #	wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz
