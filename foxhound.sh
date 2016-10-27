@@ -6,9 +6,17 @@ if [ "$EUID" -ne 0 ]
   exit 1
 fi
 
-# Load support functions
-_scriptDir="$(dirname `readlink -f $0`)"
-source lib.sh
+function Info {
+  echo -e -n '\e[7m'
+  echo "$@"
+  echo -e -n '\e[0m'
+}
+
+function Error {
+  echo -e -n '\e[41m'
+  echo "$@"
+  echo -e -n '\e[0m'
+}
 
 echo "Please enter your Critical Stack API Key: "
 read api
