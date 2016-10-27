@@ -31,10 +31,10 @@ mkdir -p /nsm/bro/extracted/
 function install_geoip()
 {
 Info "Installing GEO-IP"
-	wget -q http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz >/dev/null
-	wget -q http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz >/dev/null
-	gunzip GeoLiteCity.dat.gz >/dev/null
-	gunzip GeoLiteCityv6.dat.gz >/dev/null
+	wget -q http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz 
+	wget -q http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz 
+	gunzip GeoLiteCity.dat.gz 
+	gunzip GeoLiteCityv6.dat.gz 
 	mv GeoLiteCity* /usr/share/GeoIP/
 	ln -s /usr/share/GeoIP/GeoLiteCity.dat /usr/share/GeoIP/GeoIPCity.dat
 	ln -s /usr/share/GeoIP/GeoLiteCityv6.dat /usr/share/GeoIP/GeoIPCityv6.dat 
@@ -43,7 +43,7 @@ Info "Installing GEO-IP"
 function install_packages()
 {
 Info "Installing Required .debs"
-apt-get update &>/dev/null && apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils &>/dev/null
+apt-get update && apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils 
 
 	if [ $? -ne 0 ]; then
 		Error "Error. Please check that apt-get can install needed packages."
@@ -77,9 +77,9 @@ function install_netsniff()
 {
 Info "Installing Netsniff-NG PCAP"
 	touch /etc/netsniff-ng
-	git clone https://github.com/netsniff-ng/netsniff-ng.git >/dev/null
+	git clone -q https://github.com/netsniff-ng/netsniff-ng.git /opt/
 	cd netsniff-ng
-	./configure && make && make install >/dev/null
+	./configure && make && make install 
 } 
 
 function create_service_netsniff() 
@@ -99,7 +99,7 @@ Info "Creating Netsniff-NG service"
 	systemctl enable netsniff-ng
 	systemctl daemon-reload
 	service netsniff-ng start
-} > /dev/null
+} 
  
 function config_ssmtp() 
 {
@@ -122,18 +122,17 @@ Info "Installing YARA packages"
 	apt-get -y install pip gcc python-dev python-pip autoconf libtool
 	Info "Installing Pylzma"
 		cd /opt/
-		wget -q https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz >/dev/null
+		wget -q https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz 
 		tar -zxvf pylzma-0.4.8.tar.gz
 		cd pylzma-0.4.8/
-		python ez_setup.py >/dev/null
-		python setup.py >/dev/null
+		python ez_setup.py 
+		python setup.py 
 	Info "Installing YARA"
-		cd /opt/
-		git clone https://github.com/VirusTotal/yara.git >/dev/null
+		git clone -q https://github.com/VirusTotal/yara.git /opt/
 		cd /opt/yara
-		./bootstrap.sh >/dev/null
-		./configure >/dev/null
-		make && make install >/dev/null
+		./bootstrap.sh 
+		./configure 
+		make && make install 
 	Info "Installing PIP LOKI Packages"
 		pip install psutil
 		pip install yara-python
@@ -141,10 +140,8 @@ Info "Installing YARA packages"
 		pip install pylzma
 		pip install netaddr
 	Info "Installing LOKI"
-		cd /nsm
-		git clone https://github.com/Neo23x0/Loki.git >/dev/null
-		cd /nsm/Loki
-		git clone https://github.com/Neo23x0/signature-base.git >/dev/null
+		git clone -q https://github.com/Neo23x0/Loki.git /nsm/
+		git clone -q https://github.com/Neo23x0/signature-base.git /nsm/Loki 
 		chmod +x /nsm/Loki/loki.py
 }
 
@@ -152,12 +149,12 @@ function install_bro()
 {
 Info "Installing Bro"
 	cd /opt/
-		wget -q https://www.bro.org/downloads/release/bro-2.4.1.tar.gz >/dev/null
+		wget -q https://www.bro.org/downloads/release/bro-2.4.1.tar.gz 
 		tar -xzf bro-2.4.1.tar.gz
 	cd bro-2.4.1 
 		./configure --localstatedir=/nsm/bro/
-		make -j 4 >/dev/null
-		make install >/dev/null
+		make -j 4 
+		make install 
 	Info "Setting Bro variables"
 	echo "export PATH=/usr/local/bro/bin:\$PATH" >> /etc/profile
 }
@@ -165,8 +162,8 @@ Info "Installing Bro"
 function install_criticalstack() 
 {
 Info "Installing Critical Stack Agent"
-		wget -q http://intel.criticalstack.com/client/critical-stack-intel-arm.deb >/dev/null
-		dpkg -i critical-stack-intel-arm.deb >/dev/null
+		wget -q http://intel.criticalstack.com/client/critical-stack-intel-arm.deb 
+		dpkg -i critical-stack-intel-arm.deb 
 		sudo -u critical-stack critical-stack-intel api $api 
 		rm critical-stack-intel-arm.deb
 		sudo -u critical-stack critical-stack-intel list
@@ -196,15 +193,15 @@ function install_bro_reporting()
 Info "Bro Reporting Requirements"
 #PYSUBNETREE
 	cd /opt/
-	git clone git://git.bro-ids.org/pysubnettree.git >/dev/null
+	git clone git://git.bro-ids.org/pysubnettree.git 
 	cd pysubnettree/
-	python setup.py install >/dev/null
+	python setup.py install 
 #IPSUMDUMP
 	cd /opt/
-	wget -q http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz >/dev/null
+	wget -q http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz 
 	tar -zxvf ipsumdump-1.85.tar.gz
 	cd ipsumdump-1.85/
-	./configure && make && make install >/dev/null
+	./configure && make && make install 
 }
 
 function config_bro_scripts() 
@@ -212,10 +209,12 @@ function config_bro_scripts()
 Info "Configuring BRO scripts"
 	#PULL BRO SCRIPTS
 	cd /usr/local/bro/share/bro/site/
-	git clone https://github.com/sneakymonk3y/bro-scripts.git >/dev/null
+	if [ ! -d /usr/local/bro/share/bro/site/bro-scripts/ ]; then
+		rm -rf /usr/local/bro/share/bro/site/bro-scripts/
+	fi
+	git clone https://github.com/sneakymonk3y/bro-scripts.git 
 	echo "@load bro-scripts/geoip"  >> /usr/local/bro/share/bro/site/local.bro
 	echo "@load bro-scripts/extract"  >> /usr/local/bro/share/bro/site/local.bro
-
 	if broctl check | grep -q ' ok'; then
 	  broctl status
 	else Error "bro-script check failed"
