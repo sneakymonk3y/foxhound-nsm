@@ -88,8 +88,8 @@ function install_netsniff()
 {
 Info "Installing Netsniff-NG PCAP"
 	touch /etc/netsniff-ng
-	git clone  https://github.com/netsniff-ng/netsniff-ng.git /opt/
-	cd netsniff-ng
+	git clone  https://github.com/netsniff-ng/netsniff-ng.git /opt/netsniff-ng
+	cd /opt/netsniff-ng
 	./configure && make && make install 
 } 
 
@@ -151,7 +151,7 @@ Info "Installing YARA packages"
 		pip install netaddr
 	Info "Installing LOKI"
 		git clone  https://github.com/Neo23x0/Loki.git /nsm/Loki
-		git clone  https://github.com/Neo23x0/signature-base.git /nsm/Loki 
+		git clone  https://github.com/Neo23x0/signature-base.git /nsm/Loki/signature-base/ 
 		chmod +x /nsm/Loki/loki.py
 }
 
@@ -225,10 +225,6 @@ Info "Configuring BRO scripts"
 	git clone https://github.com/sneakymonk3y/bro-scripts.git 
 	echo "@load bro-scripts/geoip"  >> /usr/local/bro/share/bro/site/local.bro
 	echo "@load bro-scripts/extract"  >> /usr/local/bro/share/bro/site/local.bro
-	if broctl check | grep  ' ok'; then
-	  broctl status
-	else Error "bro-script check failed"
-	fi
 	broctl deploy
 }
 
