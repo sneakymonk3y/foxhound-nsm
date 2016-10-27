@@ -42,7 +42,7 @@ fi
 function install_packages()
 {
 Info "Installing Required .debs"
-apt-get update && apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils pip python-pip autoconf libtool
+apt-get update && apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils python-pip autoconf libtool
 
 	if [ $? -ne 0 ]; then
 		Error "Error. Please check that apt-get can install needed packages."
@@ -74,11 +74,11 @@ function config_net_opts()
 {
 Info "Configuring network options"
 	echo "
-		#!/bin/bash
-		for i in rx tx gso gro; do ethtool -K eth0 $i off; done;
-		ifconfig eth0 promisc
-		ifconfig eth0 mtu 9000
-		exit 0
+#!/bin/bash
+for i in rx tx gso gro; do ethtool -K eth0 $i off; done;
+ifconfig eth0 promisc
+ifconfig eth0 mtu 9000
+exit 0
 	" \ >  /etc/network/if-up.d/interface-tuneup
 	chmod +x /etc/network/if-up.d/interface-tuneup
 	ifconfig eth0 down && ifconfig eth0 up
@@ -96,17 +96,17 @@ Info "Installing Netsniff-NG PCAP"
 function create_service_netsniff() 
 {
 Info "Creating Netsniff-NG service"
-		echo "[Unit]
-		Description=Netsniff-NG PCAP
-		After=network.target
+echo "[Unit]
+Description=Netsniff-NG PCAP
+After=network.target
 
-		[Service]
-		ExecStart=/usr/local/sbin/netsniff-ng --in eth0 --out /nsm/pcap/ --bind-cpu 3 -s --interval 100MiB --prefix=foxhound-
-		Type=simple
-		EnvironmentFile=-/etc/netsniff
+[Service]
+ExecStart=/usr/local/sbin/netsniff-ng --in eth0 --out /nsm/pcap/ --bind-cpu 3 -s --interval 100MiB --prefix=foxhound-
+Type=simple
+EnvironmentFile=-/etc/netsniff
 
-		[Install]
-		WantedBy=multi-user.target" > /etc/systemd/system/netsniff-ng.service
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/netsniff-ng.service
 	systemctl enable netsniff-ng
 	systemctl daemon-reload
 	service netsniff-ng start
@@ -115,15 +115,15 @@ Info "Creating Netsniff-NG service"
 function config_ssmtp() 
 {
 Info "Configuring SSMTP"
-		echo "
-		root=$notification
-		mailhub=$smtp_server
-		hostname=foxhound
-		FromLineOverride=YES
-		UseTLS=YES
-		UseSTARTTLS=YES
-		AuthUser=$smtp_user
-		AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
+echo "
+root=$notification
+mailhub=$smtp_server:587
+hostname=foxhound
+FromLineOverride=YES
+UseTLS=NO
+UseSTARTTLS=YES
+AuthUser=$smtp_user
+AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
 }
 
 
@@ -152,6 +152,7 @@ Info "Installing YARA packages"
 	Info "Installing LOKI"
 		git clone  https://github.com/Neo23x0/Loki.git /nsm/Loki
 		git clone  https://github.com/Neo23x0/signature-base.git /nsm/Loki/signature-base/ 
+		echo "export PATH=/nsm/Loki:$PATH" >> /etc/profile
 		chmod +x /nsm/Loki/loki.py
 }
 
@@ -166,7 +167,8 @@ Info "Installing Bro"
 		make -j 4 
 		make install 
 	Info "Setting Bro variables"
-	echo "export PATH=/usr/local/bro/bin:\$PATH" >> /etc/profile
+	echo "export PATH=/usr/local/bro/bin:$PATH" >> /etc/profile
+	source ~/.bashrc
 }
 
 function install_criticalstack() 
@@ -185,16 +187,16 @@ Info "Installing Critical Stack Agent"
 		broctl deploy
 		broctl cron enable
 		#Create update script
-	echo "
-		sudo -u critical-stack critical-stack-intel config
-		echo \"#### Pulling feed update ####\"
-		sudo -u critical-stack critical-stack-intel pull
-		echo \"#### Applying the updates to the bro config ####\"
-		broctl check
-		broctl install
-		echo \"#### Restarting bro ####\"
-		broctl restart
-	" \ > /nsm/scripts/criticalstack_update
+echo "
+sudo -u critical-stack critical-stack-intel config
+echo \"#### Pulling feed update ####\"
+sudo -u critical-stack critical-stack-intel pull
+echo \"#### Applying the updates to the bro config ####\"
+broctl check
+broctl install
+echo \"#### Restarting bro ####\"
+broctl restart
+" \ > /nsm/scripts/criticalstack_update
 		sudo chmod +x /nsm/scripts/criticalstack_update
 }
 
@@ -244,7 +246,7 @@ config_bro_scripts
 #CRON JOBS
 echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
 echo "00 7/19 * * *  root /nsm/scripts/criticalstack_update" >> /etc/crontab
-echo "0-59/5 * * * * root /nsm/Loki/loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait " >> /etc/crontab 
+#echo "0-59/5 * * * * root /nsm/Loki/loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait " >> /etc/crontab 
 
 echo "
     ______           __  __                      __
@@ -256,3 +258,4 @@ echo "
 
 " \ > /etc/motd                                                                 
 echo "foxhound" > /etc/hostname
+echo "127.0.0.1		foxhound" >> /etc/hosts
