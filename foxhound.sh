@@ -35,6 +35,20 @@ mkdir -p /nsm/pcap/
 mkdir -p /nsm/scripts/
 mkdir -p /nsm/bro/
 mkdir -p /nsm/bro/extracted/
+if [ ! -d /opt/ ]; then
+	mkdir -p /opt/
+fi
+
+function install_packages()
+{
+Info "Installing Required .debs"
+apt-get update && apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils 
+
+	if [ $? -ne 0 ]; then
+		Error "Error. Please check that apt-get can install needed packages."
+		exit 2;
+	fi
+} 
 
 function install_geoip()
 {
@@ -46,17 +60,6 @@ Info "Installing GEO-IP"
 	mv GeoLiteCity* /usr/share/GeoIP/
 	ln -s /usr/share/GeoIP/GeoLiteCity.dat /usr/share/GeoIP/GeoIPCity.dat
 	ln -s /usr/share/GeoIP/GeoLiteCityv6.dat /usr/share/GeoIP/GeoIPCityv6.dat 
-} 
-
-function install_packages()
-{
-Info "Installing Required .debs"
-apt-get update && apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils 
-
-	if [ $? -ne 0 ]; then
-		Error "Error. Please check that apt-get can install needed packages."
-		exit 2;
-	fi
 } 
 
 function config_net_ipv6()
@@ -136,7 +139,7 @@ Info "Installing YARA packages"
 		python ez_setup.py 
 		python setup.py 
 	Info "Installing YARA"
-		git clone -q https://github.com/VirusTotal/yara.git /opt/
+		git clone -q https://github.com/VirusTotal/yara.git /opt/yara
 		cd /opt/yara
 		./bootstrap.sh 
 		./configure 
@@ -148,7 +151,7 @@ Info "Installing YARA packages"
 		pip install pylzma
 		pip install netaddr
 	Info "Installing LOKI"
-		git clone -q https://github.com/Neo23x0/Loki.git /nsm/
+		git clone -q https://github.com/Neo23x0/Loki.git /nsm/Loki
 		git clone -q https://github.com/Neo23x0/signature-base.git /nsm/Loki 
 		chmod +x /nsm/Loki/loki.py
 }
