@@ -87,7 +87,7 @@ Info "Configuring network options"
 function install_netsniff() 
 {
 Info "Installing Netsniff-NG PCAP"
-	touch /etc/netsniff-ng
+	touch /etc/netsniff
 	git clone  https://github.com/netsniff-ng/netsniff-ng.git /opt/netsniff-ng
 	cd /opt/netsniff-ng
 	./configure && make && make install 
@@ -103,7 +103,7 @@ Info "Creating Netsniff-NG service"
 		[Service]
 		ExecStart=/usr/local/sbin/netsniff-ng --in eth0 --out /nsm/pcap/ --bind-cpu 3 -s --interval 100MiB --prefix=foxhound-
 		Type=simple
-		EnvironmentFile=-/etc/netsniff-ng
+		EnvironmentFile=-/etc/netsniff
 
 		[Install]
 		WantedBy=multi-user.target" > /etc/systemd/system/netsniff-ng.service
