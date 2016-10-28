@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export BINDIR="${BINDIR-/usr/bin}"
+_scriptDir="$(dirname `readlink -f $0`)"
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -91,31 +91,9 @@ Info "Installing Netsniff-NG PCAP"
 	git clone  https://github.com/netsniff-ng/netsniff-ng.git /opt/netsniff-ng
 	cd /opt/netsniff-ng
 	./configure && make && make install
-echo "
-#!/bin/sh
-FS='/nsm/pcap'
-FREE=1000000
-
-checkdf() {
-  local used
-  used=`df -k ${FS} | tail -1 | awk '{ print $4 }'`
-  /bin/echo "  free space:  ${used}"
-  if [ ${used} -ge ${FREE} ]; then
-    exit 0
-  fi
-}
-
-checkdf
-
-cd /nsm/
-for f in `find /nsm/pcap/ -type f \( -name '*.pcap' \) -exec basename {} \; | sort -n -t\. -k3`; do
-  echo "  deleting " `ls -lash /nsm/pcap/${f}`
-  rm -f /nsm/pcap/${f}
-  checkdf
-done
-exit 0
-" \ > /nsm/scripts/
-chmod +x /nsm/scripts/cleanup
+	cd _scriptDir
+	mv cleanup /nsm/scripts/cleanup.sh
+	chmod +x /nsm/scripts/cleanup
 } 
 
 function create_service_netsniff() 
@@ -179,6 +157,11 @@ Info "Installing YARA packages"
 		git clone  https://github.com/Neo23x0/signature-base.git /nsm/Loki/signature-base/ 
 		echo "export PATH=/nsm/Loki:$PATH" >> /etc/profile
 		chmod +x /nsm/Loki/loki.py
+echo "
+#!/bin/sh
+/usr/bin/python /nsm/Loki/loki.py --noprocscan --dontwait --onlyrelevant -p /nsm/bro/extracted -l /nsm/Loki/log
+" \ > /nsm/scripts/scan
+chmod +x /nsm/scripts/scan
 }
 
 function install_bro() 
@@ -220,8 +203,9 @@ broctl check
 broctl install
 echo \"#### Restarting bro ####\"
 broctl restart
-" \ > /nsm/scripts/criticalstack_update
-		sudo chmod +x /nsm/scripts/criticalstack_update
+python /nsm/Loki/loki.py --update
+" \ > /nsm/scripts/update
+		sudo chmod +x /nsm/scripts/update
 }
 
 function install_bro_reporting() 
@@ -270,8 +254,8 @@ config_bro_scripts
 #CRON JOBS
 echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
 echo "0-59/5 * * * * root /nsm/scripts/cleanup" >> /etc/crontab
-echo "00 7/19 * * *  root /nsm/scripts/criticalstack_update" >> /etc/crontab
-#echo "0-59/5 * * * * root /nsm/Loki/loki.py -p /opt/bro/extracted/ --noprocscan --printAll --dontwait " >> /etc/crontab 
+echo "00 7/19 * * *  root /nsm/scripts/update" >> /etc/crontab
+#echo "0-59/5 * * * * root python /nsm/scripts/scan" >> /etc/crontab 
 
 echo "
     ______           __  __                      __
