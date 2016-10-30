@@ -73,7 +73,7 @@ Info "Disabling IPv6"
 function config_net_opts()
 {
 Info "Configuring network options"
-	cd _scriptDir
+	cd $_scriptDir
 	cp nic.sh /etc/network/if-up.d/interface-tuneup
 	chmod +x /etc/network/if-up.d/interface-tuneup
 	ifconfig eth0 down && ifconfig eth0 up
@@ -86,8 +86,8 @@ Info "Installing Netsniff-NG PCAP"
 	git clone  https://github.com/netsniff-ng/netsniff-ng.git /opt/netsniff-ng
 	cd /opt/netsniff-ng
 	./configure && make && make install
-	cd _scriptDir
-	mv cleanup /nsm/scripts/cleanup.sh
+	cd $_scriptDir
+	mv cleanup.sh /nsm/scripts/cleanup
 	chmod +x /nsm/scripts/cleanup
 } 
 
@@ -186,7 +186,6 @@ Info "Installing Critical Stack Agent"
 		#Deploy and start BroIDS
 		export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/bro/bin:\$PATH"
 	echo "Deploying and starting BroIDS"
-		broctl check
 		broctl deploy
 		broctl cron enable
 		#Create update script
@@ -263,3 +262,4 @@ echo "
 " \ > /etc/motd                                                                 
 echo "foxhound" > /etc/hostname
 echo "127.0.0.1		foxhound" >> /etc/hosts
+Info "Please reboot"
