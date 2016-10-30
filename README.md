@@ -13,5 +13,5 @@ root@foxhound:~# ./foxhound.sh
 * [Raspberry Pi 3](https://thepihut.com/products/raspberry-pi-3-model-b) or ARM based system.
 * [Raspbian Lite](https://www.raspberrypi.org/documentation/installation/installing-images/mac.md)
 * [NetGear Gigabit Switch](https://www.amazon.co.uk/NETGEAR-GS105E-200UKS-ProSAFE-Managed-Ethernet/dp/B002YPJ8KM) or similiar that supports port mirroring.
-* [Critical Stack API](https://intel.criticalstack.com/user/sign_up)
-* [Mailgun] (http://www.mailgun.com/)
+* [Critical Stack Account](https://intel.criticalstack.com/user/sign_up)
+* [Mailgun Account] (http://www.mailgun.com/)
