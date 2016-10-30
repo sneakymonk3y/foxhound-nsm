@@ -73,13 +73,8 @@ Info "Disabling IPv6"
 function config_net_opts()
 {
 Info "Configuring network options"
-	echo "
-#!/bin/bash
-for i in rx tx gso gro; do ethtool -K eth0 $i off; done;
-ifconfig eth0 promisc
-ifconfig eth0 mtu 9000
-exit 0
-	" \ >  /etc/network/if-up.d/interface-tuneup
+	cd _scriptDir
+	cp nic.sh /etc/network/if-up.d/interface-tuneup
 	chmod +x /etc/network/if-up.d/interface-tuneup
 	ifconfig eth0 down && ifconfig eth0 up
 } 
