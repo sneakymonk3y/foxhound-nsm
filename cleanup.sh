@@ -6,7 +6,6 @@ FREE=1000000
 checkdf() {
   local used
   used=`df -k ${FS} | tail -1 | awk '{ print $4 }'`
-  /bin/echo "  free space:  ${used}"
   if [ ${used} -ge ${FREE} ]; then
     exit 0
   fi
