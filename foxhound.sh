@@ -99,7 +99,7 @@ Description=Netsniff-NG PCAP
 After=network.target
 
 [Service]
-ExecStart=/usr/local/sbin/netsniff-ng --in eth0 --out /nsm/pcap/ --bind-cpu 3 -s --interval 100MiB --prefix=foxhound-
+ExecStart=/usr/local/sbin/netsniff-ng --in eth0 --out /nsm/pcap/ --bind-cpu 3 -s --interval 100MiB
 Type=simple
 EnvironmentFile=-/etc/netsniff
 
