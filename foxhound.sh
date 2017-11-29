@@ -298,9 +298,10 @@ Info "Configuring BRO scripts"
 	echo "@load bro-scripts/extract"  >> /usr/share/bro/site/local.bro
 	sed -i.bak 's/^MailTo/# MailTo/' /etc/bro/broctl.cfg
 	sed -i 's/^MailFrom/# MailFrom/' /etc/bro/broctl.cfg
-	sed -i 's/^# Mail Options/# Mail Options\n\nMailTo = $notification\nMailFrom = $smtp_user\n\n/' /etc/bro/broctl.cfg
+	sed -i "s/^# Mail Options/# Mail Options\n\nMailTo = $notification\nMailFrom = $smtp_user\n\n/" /etc/bro/broctl.cfg
 	broctl deploy
 }
+
 
 install_geoip
 install_packages
