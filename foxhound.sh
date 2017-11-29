@@ -25,7 +25,7 @@ echo "this device before rebooting. Please hit Enter."
 read lala
 
 if [ -e /run/sshwarn ] ; then
-	echo "sshd is running and default password for user pi still active."
+	echo "sshd is running and default password for user pi active during last login."
 	echo "Seriously? Please fix. Thanks."
 	exit 1
 fi
