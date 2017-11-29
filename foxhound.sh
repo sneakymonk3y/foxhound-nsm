@@ -18,10 +18,17 @@ function Error {
   echo -e -n '\e[0m'
 }
 
+echo ""
 echo "eth0 will be configured for sniffing. Make sure"
 echo "you have configured another interface for accessing"
 echo "this device before rebooting. Please hit Enter."
 read lala
+
+if [ -e /run/sshwarn ] ; then
+	echo "sshd is running and default password for user pi still active."
+	echo "Seriously? Please fix. Thanks."
+	exit 1
+fi
 
 if [ -r unattended.txt ] ; then
 	. unattended.txt
