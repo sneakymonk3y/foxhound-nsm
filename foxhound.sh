@@ -18,16 +18,22 @@ function Error {
   echo -e -n '\e[0m'
 }
 
-echo "Please enter your Critical Stack API Key: "
-read api
-echo "Please enter your SMTP server"
-read smtp_server
-echo "Please enter your SMTP user"
-read smtp_user
-echo "Please enter your SMTP password"
-read smtp_pass
-echo "Please enter your notification email"
-read notification
+if [ -r unattended.txt ] ; then
+	. unattended.txt
+else
+
+   echo "Please enter your Critical Stack API Key: "
+   read api
+   echo "Please enter your SMTP server"
+   read smtp_server
+   echo "Please enter your SMTP user"
+   read smtp_user
+   echo "Please enter your SMTP password"
+   read smtp_pass
+   echo "Please enter your notification email"
+   read notification
+fi
+
 
 Info  "Creating directories"
 mkdir -p /nsm
@@ -42,7 +48,7 @@ fi
 function install_packages()
 {
 Info "Installing Required .debs"
-apt-get update && apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils python-pip autoconf libtool
+apt-get update && apt-get -y install cmake make gcc g++ flex bison libpcap-dev libssl-dev python-dev swig zlib1g-dev ssmtp htop vim libgeoip-dev ethtool git tshark tcpdump nmap mailutils python-pip autoconf libtool pkg-config libnacl-dev libncurses5-dev libnet1-dev libcli-dev libnetfilter-conntrack-dev liburcu-dev
 
 	if [ $? -ne 0 ]; then
 		Error "Error. Please check that apt-get can install needed packages."
@@ -83,9 +89,7 @@ function install_netsniff()
 {
 Info "Installing Netsniff-NG PCAP"
 	touch /etc/netsniff
-	git clone  https://github.com/netsniff-ng/netsniff-ng.git /opt/netsniff-ng
-	cd /opt/netsniff-ng
-	./configure && make && make install
+	apt-get -y install netsniff-ng
 	cd $_scriptDir
 	mv cleanup.sh /nsm/scripts/cleanup
 	chmod +x /nsm/scripts/cleanup
@@ -128,19 +132,19 @@ AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
 function install_loki() 
 {
 Info "Installing YARA packages"
-	Info "Installing Pylzma"
-		cd /opt/
-		wget  https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz 
-		tar -zxvf pylzma-0.4.8.tar.gz
-		cd pylzma-0.4.8/
-		python ez_setup.py 
-		python setup.py 
-	Info "Installing YARA"
-		git clone  https://github.com/VirusTotal/yara.git /opt/yara
-		cd /opt/yara
-		./bootstrap.sh 
-		./configure 
-		make && make install 
+	# Info "Installing Pylzma"
+	#	cd /opt/
+	#	wget  https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz 
+	#	tar -zxvf pylzma-0.4.8.tar.gz
+	#	cd pylzma-0.4.8/
+	#	python ez_setup.py 
+	#	python setup.py 
+	# Info "Installing YARA"
+		# git clone  https://github.com/VirusTotal/yara.git /opt/yara
+		# cd /opt/yara
+		# ./bootstrap.sh 
+		# ./configure 
+		# make && make install 
 	Info "Installing PIP LOKI Packages"
 		pip install psutil
 		pip install yara-python
@@ -162,16 +166,18 @@ chmod +x /nsm/scripts/scan
 function install_bro() 
 {
 Info "Installing Bro"
-	cd /opt/
-		wget  https://www.bro.org/downloads/release/bro-2.4.1.tar.gz 
-		tar -xzf bro-2.4.1.tar.gz
-	cd bro-2.4.1 
-		./configure --localstatedir=/nsm/bro/
-		make -j 4 
-		make install 
-	Info "Setting Bro variables"
-	echo "export PATH=/usr/local/bro/bin:$PATH" >> /etc/profile
-	source ~/.bashrc
+	apt-get -y install bro broctl bro-pkg bro-common bro-aux 
+	# cd /opt/
+		# wget  https://www.bro.org/downloads/release/bro-2.4.1.tar.gz 
+		# wget  https://www.bro.org/downloads/bro-2.5.2.tar.gz
+		# tar -xzf bro-2.5.2.tar.gz
+	# cd bro-2.5.2 
+		# ./configure --localstatedir=/nsm/bro/
+		# make -j 4 
+		# make install 
+	# Info "Setting Bro variables"
+	# echo "export PATH=/usr/local/bro/bin:$PATH" >> /etc/profile
+	# source ~/.bashrc
 }
 
 function install_criticalstack() 
