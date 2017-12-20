@@ -183,10 +183,16 @@ Info "Installing Bro"
 function install_criticalstack() 
 {
 Info "Installing Critical Stack Agent"
-		wget  http://intel.criticalstack.com/client/critical-stack-intel-arm.deb 
-		dpkg -i critical-stack-intel-arm.deb 
+		# wget  http://intel.criticalstack.com/client/critical-stack-intel-arm.deb 
+		# dpkg -i critical-stack-intel-arm.deb 
+		curl https://packagecloud.io/install/repositories/criticalstack/critical-stack-intel/script.deb.sh | sudo bash
+		apt-get install critical-stack-intel
+		chown critical-stack:critical-stack /usr/share/bro/site/local.bro
+		sudo -u critical-stack critical-stack-intel config --set bro.path=/usr/bin/bro
+		sudo -u critical-stack critical-stack-intel config --set bro.include.path=/usr/share/bro/site/local.bro
+		sudo -u critical-stack critical-stack-intel config --set bro.broctl.path=/usr/bin/broctl
 		sudo -u critical-stack critical-stack-intel api $api 
-		rm critical-stack-intel-arm.deb
+		# rm critical-stack-intel-arm.deb
 		sudo -u critical-stack critical-stack-intel list
 		sudo -u critical-stack critical-stack-intel pull
 		#Deploy and start BroIDS
@@ -228,13 +234,14 @@ function config_bro_scripts()
 {
 Info "Configuring BRO scripts"
 	#PULL BRO SCRIPTS
-	cd /usr/local/bro/share/bro/site/
-	if [ ! -d /usr/local/bro/share/bro/site/bro-scripts/ ]; then
-		rm -rf /usr/local/bro/share/bro/site/bro-scripts/
+	cd /usr/share/bro/site/
+	if [ -d /usr/share/bro/site/bro-scripts/ ]; then
+		rm -rf /usr/share/bro/site/bro-scripts/
 	fi
+	mkdir -p /usr/share/bro/site/bro-scripts
 	git clone https://github.com/sneakymonk3y/bro-scripts.git 
-	echo "@load bro-scripts/geoip"  >> /usr/local/bro/share/bro/site/local.bro
-	echo "@load bro-scripts/extract"  >> /usr/local/bro/share/bro/site/local.bro
+	echo "@load bro-scripts/geoip"  >> /usr/share/bro/site/local.bro
+	echo "@load bro-scripts/extract"  >> /usr/share/bro/site/local.bro
 	broctl deploy
 }
 
