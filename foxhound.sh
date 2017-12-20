@@ -71,8 +71,12 @@ Info "Installing GEO-IP"
 function config_net_ipv6()
 {
 Info "Disabling IPv6"
-	echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
-	sed -i '1 s/$/ ipv6.disable_ipv6=1/' /boot/cmdline.txt
+	if [ `grep 'net.ipv6.conf.all.disable_ipv6 = 1' /etc/sysctl.conf | wc -l` -eq 0 ] ; then
+		echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+	fi
+	if [ `grep 'ipv6.disable_ipv6=1' /boot/cmdline.txt | wc -l` -eq 0 ] ; then
+		sed -i '1 s/$/ ipv6.disable_ipv6=1/' /boot/cmdline.txt
+	fi
 	sysctl -p
 } 
 
@@ -217,11 +221,9 @@ python /nsm/Loki/loki.py --update
 function install_bro_reporting() 
 {
 Info "Bro Reporting Requirements"
+	pip install colorama
 #PYSUBNETREE
-	cd /opt/
-	git clone  git://git.bro-ids.org/pysubnettree.git 
-	cd pysubnettree/
-	python setup.py install 
+	pip install pysubnettree
 #IPSUMDUMP
 	cd /opt/
 	wget http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz 
@@ -259,7 +261,7 @@ install_bro_reporting
 config_bro_scripts
 
 #CRON JOBS
-echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
+echo "0-59/5 * * * * root /usr/bin/broctl cron" >> /etc/crontab
 echo "0-59/5 * * * * root /nsm/scripts/cleanup" >> /etc/crontab
 echo "00 7/19 * * *  root /nsm/scripts/update" >> /etc/crontab
 #echo "0-59/5 * * * * root python /nsm/scripts/scan" >> /etc/crontab 
