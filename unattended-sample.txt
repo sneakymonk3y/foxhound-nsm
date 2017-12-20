@@ -1,0 +1,5 @@
+api=""
+smtp_server=""
+smtp_user=""
+smtp_pass=""
+notification=""
