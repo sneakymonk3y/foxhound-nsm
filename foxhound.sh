@@ -170,7 +170,7 @@ chmod +x /nsm/scripts/scan
 function install_bro() 
 {
 Info "Installing Bro"
-	apt-get -y install bro broctl bro-pkg bro-common bro-aux 
+	apt-get -y install bro broctl bro-common bro-aux 
 	# cd /opt/
 		# wget  https://www.bro.org/downloads/release/bro-2.4.1.tar.gz 
 		# wget  https://www.bro.org/downloads/bro-2.5.2.tar.gz
@@ -187,16 +187,13 @@ Info "Installing Bro"
 function install_criticalstack() 
 {
 Info "Installing Critical Stack Agent"
-		# wget  http://intel.criticalstack.com/client/critical-stack-intel-arm.deb 
-		# dpkg -i critical-stack-intel-arm.deb 
-		curl https://packagecloud.io/install/repositories/criticalstack/critical-stack-intel/script.deb.sh | sudo bash
-		apt-get install critical-stack-intel
+	wget  --no-check-certificate https://intel.criticalstack.com/client/critical-stack-intel-arm.deb
+	dpkg -i critical-stack-intel-arm.deb
 		chown critical-stack:critical-stack /usr/share/bro/site/local.bro
 		sudo -u critical-stack critical-stack-intel config --set bro.path=/usr/bin/bro
 		sudo -u critical-stack critical-stack-intel config --set bro.include.path=/usr/share/bro/site/local.bro
 		sudo -u critical-stack critical-stack-intel config --set bro.broctl.path=/usr/bin/broctl
 		sudo -u critical-stack critical-stack-intel api $api 
-		# rm critical-stack-intel-arm.deb
 		sudo -u critical-stack critical-stack-intel list
 		sudo -u critical-stack critical-stack-intel pull
 		#Deploy and start BroIDS
