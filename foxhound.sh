@@ -106,7 +106,7 @@ Info "Configuring network options"
 function config_eth0()
 {
 Info "Configuring eth0"
-cat >/etc/network/interfaces.d/eth0.cfg <<#EOF# 
+cat > /etc/network/interfaces.d/eth0.cfg <<#EOF# 
 iface eth0 inet static
 static ip_address=0.0.0.0
 #EOF#
