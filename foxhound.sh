@@ -119,7 +119,7 @@ Info "Installing Netsniff-NG PCAP"
 	touch /etc/netsniff
 	apt-get -y install netsniff-ng
 	cd $_scriptDir
-	mv cleanup.sh /nsm/scripts/cleanup
+	cp cleanup.sh /nsm/scripts/cleanup
 	chmod +x /nsm/scripts/cleanup
 } 
 
