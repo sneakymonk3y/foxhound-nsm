@@ -54,10 +54,13 @@ mkdir -p /nsm
 mkdir -p /nsm/pcap/
 mkdir -p /nsm/scripts/
 mkdir -p /nsm/bro/
+mkdir -p /nsm/bro/logs
 mkdir -p /nsm/bro/extracted/
 if [ ! -d /opt/ ]; then
 	mkdir -p /opt/
 fi
+ln -s /nsm/bro/logs /var/log/bro
+
 
 function install_packages()
 {
