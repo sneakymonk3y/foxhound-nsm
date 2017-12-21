@@ -18,6 +18,11 @@ function Error {
   echo -e -n '\e[0m'
 }
 
+echo "eth0 will be configured for sniffing. Make sure"
+echo "you have configured another interface for accessing"
+echo "this device before rebooting. Please hit Enter."
+read lala
+
 if [ -r unattended.txt ] ; then
 	. unattended.txt
 else
@@ -97,6 +102,16 @@ Info "Configuring network options"
 	chmod +x /etc/network/if-up.d/interface-tuneup
 	ifconfig eth0 down && ifconfig eth0 up
 } 
+
+function config_eth0()
+{
+Info "Configuring eth0"
+cat >/etc/network/interfaces.d/eth0.cfg <<#EOF# 
+iface eth0 inet static
+static ip_address=0.0.0.0
+#EOF#
+
+}
 
 function install_netsniff() 
 {
@@ -272,6 +287,7 @@ install_geoip
 install_packages
 config_net_ipv6
 config_net_opts
+config_eth0
 install_netsniff
 create_service_netsniff
 config_ssmtp
