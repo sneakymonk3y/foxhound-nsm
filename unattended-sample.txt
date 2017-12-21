@@ -4,3 +4,4 @@ smtp_server_port=
 smtp_user=""
 smtp_pass=""
 notification=""
+ntp_server=""
