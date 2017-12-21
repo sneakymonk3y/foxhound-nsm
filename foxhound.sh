@@ -26,6 +26,8 @@ else
    read api
    echo "Please enter your SMTP server"
    read smtp_server
+   echo "Please enter your SMTP server port"
+   read smtp_server_port
    echo "Please enter your SMTP user"
    read smtp_user
    echo "Please enter your SMTP password"
@@ -123,7 +125,7 @@ function config_ssmtp()
 Info "Configuring SSMTP"
 echo "
 root=$notification
-mailhub=$smtp_server:587
+mailhub=$smtp_server:$smtp_server_port
 hostname=foxhound
 FromLineOverride=YES
 UseTLS=NO
