@@ -34,6 +34,13 @@ else
    read smtp_pass
    echo "Please enter your notification email"
    read notification
+   echo "Please enter your ntp server (leave blank for defaults)"
+   read ntp_server
+fi
+
+if [ "${api}" == "" ] ; then
+	Error "Missing api key. Exiting."
+	exit 1
 fi
 
 
@@ -132,6 +139,19 @@ UseTLS=NO
 UseSTARTTLS=YES
 AuthUser=$smtp_user
 AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
+}
+
+function config_ntp()
+{
+if [ "${ntp_server}" == "" ]; then
+	Info "No ntp server set, skipping."
+else
+	Info "Configuring NTP"
+	sed -i.bak 's/^pool /# pool /' /etc/ntp.conf
+	sed -i 's/^server /# server /' /etc/ntp.conf
+	echo "## added by foxhound:"  >> /etc/ntp.conf
+	echo "server $ntp_server" >> /etc/ntp.conf
+fi
 }
 
 
@@ -255,6 +275,7 @@ config_net_opts
 install_netsniff
 create_service_netsniff
 config_ssmtp
+config_ntp
 install_loki
 install_bro
 install_criticalstack
