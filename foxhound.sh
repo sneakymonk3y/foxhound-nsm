@@ -160,6 +160,7 @@ Info "Installing YARA packages"
 		git clone  https://github.com/Neo23x0/signature-base.git /nsm/Loki/signature-base/ 
 		echo "export PATH=/nsm/Loki:$PATH" >> /etc/profile
 		chmod +x /nsm/Loki/loki.py
+		echo "export PYTHONPATH=$PYTHONPATH:/nsm/Loki" >> /etc/profile
 echo "
 #!/bin/sh
 /usr/bin/python /nsm/Loki/loki.py --noprocscan --dontwait --onlyrelevant -p /nsm/bro/extracted -l /nsm/Loki/log
@@ -210,7 +211,8 @@ broctl check
 broctl install
 echo \"#### Restarting bro ####\"
 broctl restart
-python /nsm/Loki/loki.py --update
+cd /nsm/Loki/
+python ./loki.py --update
 " \ > /nsm/scripts/update
 		sudo chmod +x /nsm/scripts/update
 }
