@@ -34,17 +34,17 @@ if [ -r unattended.txt ] ; then
 	. unattended.txt
 else
 
-   echo "Please enter your Critical Stack API Key: "
+   echo "Please enter your Critical Stack API Key (senso): "
    read api
    echo "Please enter your SMTP server"
    read smtp_server
    echo "Please enter your SMTP server port"
    read smtp_server_port
-   echo "Please enter your SMTP user"
+   echo "Please enter your SMTP user (FROM user)"
    read smtp_user
    echo "Please enter your SMTP password"
    read smtp_pass
-   echo "Please enter your notification email"
+   echo "Please enter your notification email (TO user)"
    read notification
    echo "Please enter your ntp server (leave blank for defaults)"
    read ntp_server
@@ -117,6 +117,8 @@ function config_eth0()
 {
 Info "Configuring eth0"
 cat >> /etc/dhcpcd.conf <<EOF 
+
+# foxhound for promiscuous mode
 static
 interface eth0
 static ip_address=0.0.0.0
@@ -156,13 +158,16 @@ WantedBy=multi-user.target" > /etc/systemd/system/netsniff-ng.service
 function config_ssmtp() 
 {
 Info "Configuring SSMTP"
+dom=`echo ${notification} | cut -d "@" -f 2`
 echo "
+# Debug=YES
 root=$notification
 mailhub=$smtp_server:$smtp_server_port
+rewriteDomain=$dom
 hostname=foxhound
 FromLineOverride=YES
-UseTLS=NO
-UseSTARTTLS=YES
+UseTLS=Yes
+UseSTARTTLS=No
 AuthUser=$smtp_user
 AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
 }
@@ -291,6 +296,9 @@ Info "Configuring BRO scripts"
 	git clone https://github.com/sneakymonk3y/bro-scripts.git 
 	echo "@load bro-scripts/geoip"  >> /usr/share/bro/site/local.bro
 	echo "@load bro-scripts/extract"  >> /usr/share/bro/site/local.bro
+	sed -i.bak 's/^MailTo/# MailTo/' /etc/bro/broctl.cfg
+	sed -i 's/^MailFrom/# MailFrom/' /etc/bro/broctl.cfg
+	sed -i 's/^# Mail Options/# Mail Options\n\nMailTo = $notification\nMailFrom = $smtp_user\n\n/' /etc/bro/broctl.cfg
 	broctl deploy
 }
 
@@ -326,4 +334,9 @@ echo "
 " \ > /etc/motd                                                                 
 echo "foxhound" > /etc/hostname
 echo "127.0.0.1		foxhound" >> /etc/hosts
+echo ""
+echo "If you get problems receiving mails from your foxhound you may have"
+echo "a look at the following files:"
+echo "/etc/ssmtp/ssmtp.conf"
+echo "/etc/bro/broctl.cfg"
 Info "Please reboot"
