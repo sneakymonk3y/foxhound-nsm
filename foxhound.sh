@@ -116,8 +116,9 @@ Info "Configuring network options"
 function config_eth0()
 {
 Info "Configuring eth0"
-cat >> /etc/network/interfaces <<EOF 
-iface eth0 inet static
+cat >> /etc/dhcpcd.conf <<EOF 
+static
+interface eth0
 static ip_address=0.0.0.0
 EOF
 
