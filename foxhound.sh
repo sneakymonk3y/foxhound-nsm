@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 _scriptDir="$(dirname `readlink -f $0`)"
 
+export DEBIAN_FRONTEND=noninteractive
+
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit 1
