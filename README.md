@@ -33,7 +33,7 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
   * expand filesystem (Advanced Options)
   * exit, don't reboot yet
 * check if you can ssh into Pi using the WLAN IP of the Pi
-* optionally: prepare PiDrice [see Hints below](#Hints)
+* optionally: prepare PiDrice ([see Hints below](#hints))
 * reboot (`reboot`)
 * detach LAN cable
 
@@ -61,7 +61,7 @@ chmod +x foxhound.sh
 * configure switch (set up port mirroring)
 * plug switch into your home LAN on a suitable spot
 * connect switch mirror port with Pi
-* power up Pi and see if it works as expected [see e.g. Further Reading below](#Further-Reading)
+* power up Pi and see if it works as expected ([see e.g. Further Reading below](further-reading))
 
 ## Hints
 * the script isn't meant to be run multiple times on one installation (yet), so to get reliable results you should use a fresh OS SD card (and erase `/nsm` if using PiDrive) when re-running the script
