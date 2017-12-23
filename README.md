@@ -61,7 +61,7 @@ chmod +x foxhound.sh
 * configure switch (set up port mirroring)
 * plug switch into your home LAN on a suitable spot
 * connect switch mirror port with Pi
-* power up Pi and see if it works as expected ([see e.g. Further Reading below](further-reading))
+* power up Pi and see if it works as expected ([see e.g. Further Reading below](#further-reading))
 
 ## Hints
 * the script isn't meant to be run multiple times on one installation (yet), so to get reliable results you should use a fresh OS SD card (and erase `/nsm` if using PiDrive) when re-running the script
