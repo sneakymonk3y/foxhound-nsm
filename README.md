@@ -38,7 +38,7 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
 * detach LAN cable
 
 ## Install Foxhound
-* connect to Pi using WLAN IP
+* ssh into Pi using WLAN IP
 * update base OS:
 ```
 sudo su -
