@@ -15,10 +15,10 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
 
 ## General Preparation
 * critical stack:
- * get a critical [stack account](https://intel.criticalstack.com/user/sign_up)
- * set up a collection and a sensor
- * add feeds to your collection
- * note down sensor API key
+  * get a critical [stack account](https://intel.criticalstack.com/user/sign_up)
+  * set up a collection and a sensor
+  * add feeds to your collection
+  * note down sensor API key
 * not down parameters for email server
 
 ## Prepare Pi
@@ -29,9 +29,9 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
 * boot Pi, ssh into devivce
 * change password for user pi (`passwd`)
 * sudo to root (`sudo su -`) and use `raspi-config` to
- * set up WLAN (Network Options)
- * expand filesystem (Advanced Options)
- * exit, don't reboot yet
+  * set up WLAN (Network Options)
+  * expand filesystem (Advanced Options)
+  * exit, don't reboot yet
 * check if you can ssh into Pi using the WLAN IP of the Pi
 * optionally: prepare PiDrice [see Hints below](#Hints)
 * reboot (`reboot`)
@@ -67,10 +67,10 @@ chmod +x foxhound.sh
 * the script isn't meant to be run multiple times on one installation (yet), so to get reliable results you should use a fresh OS SD card (and erase `/nsm` if using PiDrive) when re-running the script
 * use cheap micro SD card for OS, e.g. 8 GB ones (get multiple and have one ready with current Raspbian distro)
 * use separate file systeem for `/nsm`, e.g. [Western Digital PiDrive Foundation Edition](http://wdlabs.wd.com/category/wd-pidrive/)
- * delete existing partitions
- * create primary partition and label it, e.g. `NSM`
- * format with ext4, e.g. `mkfs.ext4 /dev/sda1`
- * mount into `/nsm`, e.g. add `LABEL=NSM /nsm ext4 defaults 0 0` to `/etc/fstab` and `mkdir /nsm && mount /nsm`
+  * delete existing partitions
+  * create primary partition and label it, e.g. `NSM`
+  * format with ext4, e.g. `mkfs.ext4 /dev/sda1`
+  * mount into `/nsm`, e.g. add `LABEL=NSM /nsm ext4 defaults 0 0` to `/etc/fstab` and `mkdir /nsm && mount /nsm`
 
 ## To Do
 * adopt script so it can be run multiple times in a row without creating strange side effects
