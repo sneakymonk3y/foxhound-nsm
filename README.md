@@ -11,6 +11,7 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
   * [Security Onion's Device List](https://github.com/Security-Onion-Solutions/security-onion/wiki/Hardware#packets)
 * [Critical Stack Account](https://intel.criticalstack.com/user/sign_up)
 * optional: [Mailgun Account](http://www.mailgun.com/)
+* optional: [WD PiDrive Foundation Edition](http://wdlabs.wd.com/category/wd-pidrive/)
 
 ## General Preparation
 * critical stack:
