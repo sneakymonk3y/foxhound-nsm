@@ -321,9 +321,9 @@ install_bro_reporting
 config_bro_scripts
 
 #CRON JOBS
-echo "*/5 * * * * root /usr/bin/broctl cron" >> /etc/crontab
+echo "0,5,10,15,20,25,35,40,45,50,55 * * * * root /usr/bin/broctl cron" >> /etc/crontab
 echo "*/5 * * * * root /nsm/scripts/cleanup" >> /etc/crontab
-echo "00 7-19 * * *  root /nsm/scripts/update" >> /etc/crontab
+echo "30 * * * *  root /nsm/scripts/update" >> /etc/crontab
 #echo "*/5 * * * * root python /nsm/scripts/scan" >> /etc/crontab 
 
 echo "
