@@ -48,6 +48,7 @@ apt-get -y -u dist-upgrade
 * install git: `apt-get -y install git`
 * change into root's home directory: `cd`
 * clone repository: `git clone https://github.com/sneakymonk3y/foxhound-nsm.git`
+ (as long as the pull request hasn't been accepted by the maintainer pls use my repo: `git clone https://github.com/gebhard73/foxhound-nsm.git`
 * prepare installation:
 ```
 cd foxhound-nsm
