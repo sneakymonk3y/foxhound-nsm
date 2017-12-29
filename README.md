@@ -19,7 +19,7 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
   * set up a collection and a sensor
   * add feeds to your collection
   * note down sensor API key
-* not down parameters for email server
+* note down parameters for email server
 
 ## Prepare Pi
 * download [Raspian Lite](https://www.raspberrypi.org/downloads/raspbian/) and [put onto micro SD card](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
@@ -29,16 +29,16 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
 * boot Pi, ssh into devivce
 * change password for user pi (`passwd`)
 * sudo to root (`sudo su -`) and use `raspi-config` to
-  * set up WLAN (Network Options)
+  * set up Wifi (Network Options)
   * expand filesystem (Advanced Options)
   * exit, don't reboot yet
-* check if you can ssh into Pi using the WLAN IP of the Pi
-* optionally: prepare PiDrice ([see Hints below](#hints))
+* check if you can ssh into Pi using the Wifi IP of the Pi
+* optionally: prepare PiDrive ([see Hints below](#hints))
 * reboot (`reboot`)
 * detach LAN cable
 
 ## Install Foxhound
-* ssh into Pi using WLAN IP
+* ssh into Pi using Wifi IP
 * update base OS:
 ```
 sudo su -
@@ -48,15 +48,14 @@ apt-get -y -u dist-upgrade
 * install git: `apt-get -y install git`
 * change into root's home directory: `cd`
 * clone repository: `git clone https://github.com/sneakymonk3y/foxhound-nsm.git`
- (as long as the pull request hasn't been accepted by the maintainer pls use my repo: `git clone https://github.com/gebhard73/foxhound-nsm.git`
 * prepare installation:
 ```
 cd foxhound-nsm
 chmod +x foxhound.sh
 ```
-* optionally: copy unattended-sample.txt to unattended.txt and adopt to your needs
+* optionally: copy `unattended-sample.txt` to `unattended.txt` and adopt to your needs
 * begin installation: `./foxhound.sh`
-* shuwdon device: `shutdown -h now`
+* shutdown device: `shutdown -h now`
 
 ## Start Sniffing
 * configure switch (set up port mirroring)
@@ -65,8 +64,11 @@ chmod +x foxhound.sh
 * power up Pi and see if it works as expected ([see e.g. Further Reading below](#further-reading))
 
 ## Hints
-* the script isn't meant to be run multiple times on one installation (yet), so to get reliable results you should use a fresh OS SD card (and erase `/nsm` if using PiDrive) when re-running the script
-* use cheap micro SD card for OS, e.g. 8 GB ones (get multiple and have one ready with current Raspbian distro)
+* the script isn't meant to be run multiple times on one installation (yet), so to get reliable results you should use a fresh OS SD card (and erase `/nsm` if using PiDrive) before re-running the script
+* use cheap micro SD cards for OS, e.g. 8 GB ones (get multiple and have one ready with current Raspbian distro)
+* it's normal for the critical stack installation part that it complains about not finding bro binaries; this is taken care of directly after the installation of critical stack within the installation script by setting broctl configs
+* to troubleshoot you may ececute the cron jobs (can be found at the bottom of `/etc/crontab`) manually as root and see if any error occurs
+* email configuration can be found in `/etc/ssmtp/ssmtp.conf` and `/etc/bro/broctl.cfg`
 * use separate file systeem for `/nsm`, e.g. [Western Digital PiDrive Foundation Edition](http://wdlabs.wd.com/category/wd-pidrive/)
   * delete existing partitions
   * create primary partition and label it, e.g. `NSM`
