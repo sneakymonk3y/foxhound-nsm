@@ -55,7 +55,7 @@ apt-get -y -u dist-upgrade
 cd foxhound-nsm
 chmod +x foxhound.sh
 ```
-* optionally: copy unattended-sample.txt to unattended.txt and adopt to your needs
+* optionally: copy `unattended-sample.txt` to `unattended.txt` and adopt to your needs
 * begin installation: `./foxhound.sh`
 * shuwdon device: `shutdown -h now`
 
