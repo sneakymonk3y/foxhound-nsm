@@ -69,6 +69,8 @@ if [ ! -d /opt/ ]; then
 	mkdir -p /opt/
 fi
 ln -s /nsm/bro/logs /var/log/bro
+mkdir /nsm/bro/spool
+ln -s /nsm/bro/spool /var/spool/bro
 
 
 function install_packages()
