@@ -69,6 +69,8 @@ if [ ! -d /opt/ ]; then
 	mkdir -p /opt/
 fi
 ln -s /nsm/bro/logs /var/log/bro
+mkdir /nsm/bro/spool
+ln -s /nsm/bro/spool /var/spool/bro
 
 
 function install_packages()
@@ -280,9 +282,11 @@ Info "Bro Reporting Requirements"
 	pip install pysubnettree
 #IPSUMDUMP
 	cd /opt/
-	wget http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz 
-	tar -zxvf ipsumdump-1.85.tar.gz
-	cd ipsumdump-1.85/
+	# wget http://www.read.seas.harvard.edu/~kohler/ipsumdump/ipsumdump-1.85.tar.gz 
+	wget https://github.com/kohler/ipsumdump/archive/master.zip
+	# tar -zxvf ipsumdump-1.85.tar.gz
+	unzip master.zip
+	cd ipsumdump-master
 	./configure && make && make install 
 }
 

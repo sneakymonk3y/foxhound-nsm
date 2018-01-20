@@ -32,6 +32,7 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
   * set up WLAN (Network Options)
   * expand filesystem (Advanced Options)
   * exit, don't reboot yet
+* set a password for root (important if you wand to access console mode in case of system problems): `passwd`
 * check if you can ssh into Pi using the WLAN IP of the Pi
 * optionally: prepare PiDrice ([see Hints below](#hints))
 * reboot (`reboot`)
@@ -54,7 +55,7 @@ apt-get -y -u dist-upgrade
 cd foxhound-nsm
 chmod +x foxhound.sh
 ```
-* optionally: copy unattended-sample.txt to unattended.txt and adopt to your needs
+* optionally: copy `unattended-sample.txt` to `unattended.txt` and adopt to your needs
 * begin installation: `./foxhound.sh`
 * shuwdon device: `shutdown -h now`
 
@@ -71,7 +72,7 @@ chmod +x foxhound.sh
   * delete existing partitions
   * create primary partition and label it, e.g. `NSM`
   * format with ext4, e.g. `mkfs.ext4 /dev/sda1`
-  * mount into `/nsm`, e.g. add `LABEL=NSM /nsm ext4 defaults 0 0` to `/etc/fstab` and `mkdir /nsm && mount /nsm`
+  * mount into `/nsm`, e.g. add `LABEL=NSM /nsm ext4 defaults,nofail 0 0` to `/etc/fstab` and `mkdir /nsm && mount /nsm`
 
 ## To Do
 * adopt script so it can be run multiple times in a row without creating strange side effects
