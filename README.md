@@ -32,7 +32,7 @@ RaspberryPi 3 NSM based on [Bro](https://www.bro.org). Suitable for a home 'blac
   * set up WLAN (Network Options)
   * expand filesystem (Advanced Options)
   * exit, don't reboot yet
-* set a password for root (important if you wand to access console mode in case of system problems: `passwd`
+* set a password for root (important if you wand to access console mode in case of system problems): `passwd`
 * check if you can ssh into Pi using the WLAN IP of the Pi
 * optionally: prepare PiDrice ([see Hints below](#hints))
 * reboot (`reboot`)
